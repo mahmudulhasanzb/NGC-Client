@@ -14,7 +14,7 @@ const quickLinks = [
 export function Footer() {
   return (
     <footer className="border-t border-border bg-secondary/40">
-      <div className="mx-auto max-w-8xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-8xl px-4 pt-10 pb-5 sm:px-6 sm:pt-12 sm:pb-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand Info */}
           <div className="space-y-4">
@@ -72,10 +72,10 @@ export function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
-               <a href="mailto:[EMAIL_ADDRESS]" className='flex gap-3'>
-                 <Mail className="h-4 w-4 shrink-0 text-primary" />
-                <span>info@ngc.edu.bd</span>
-               </a>
+                <a href="mailto:info@ngc.edu.bd" className="flex gap-3">
+                  <Mail className="h-4 w-4 shrink-0 text-primary" />
+                  <span>info@ngc.edu.bd</span>
+                </a>
               </li>
             </ul>
           </div>
@@ -87,14 +87,26 @@ export function Footer() {
             </h3>
             <div className="flex gap-3">
               {[
-                { icon: LogoFacebook, label: 'Facebook', href: 'https://www.facebook.com/nabiganjgovernmentcollege.edu.bd?mibextid=LQQPHv' },
-                { icon: Video, label: 'YouTube', href: 'https://www.youtube.com/@nabiganjgovernmentcollege' },
-                { icon: LogoLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/nabiganj-government-college-309325229/' },
+                {
+                  icon: LogoFacebook,
+                  label: 'Facebook',
+                  href: 'https://www.facebook.com/nabiganjgovernmentcollege.edu.bd?mibextid=LQQPHv',
+                },
+                {
+                  icon: Video,
+                  label: 'YouTube',
+                  href: 'https://www.youtube.com/@nabiganjgovernmentcollege',
+                },
+                {
+                  icon: LogoLinkedin,
+                  label: 'LinkedIn',
+                  href: 'https://www.linkedin.com/in/nabiganj-government-college-309325229/',
+                },
               ].map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}
                   href={href}
-                  target='_blank'
+                  target="_blank"
                   aria-label={label}
                   className="flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
                 >
@@ -105,11 +117,25 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Copyright */}
-        <div className="mt-10 border-t border-border pt-6 text-center">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Nabiganj Government College. All
-            rights reserved.
+        {/* Bottom Copyright & Credit */}
+        <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-5 text-xs text-muted-foreground sm:flex-row">
+          <p className="select-none">
+            &copy; {new Date().getFullYear()}{' '}
+            <span className="font-semibold text-foreground">
+              Nabiganj Government College
+            </span>
+            . All rights reserved.
+          </p>
+          <p className="select-none">
+            Developed by{' '}
+            <Link
+              href="https://www.linkedin.com/in/mahmudulhasanzb/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-foreground transition-colors hover:text-primary"
+            >
+              Mahmudul Hasan <span className="text-primary font-bold">&gt;</span>
+            </Link>
           </p>
         </div>
       </div>

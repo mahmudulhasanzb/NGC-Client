@@ -114,7 +114,7 @@ const ContactSection = () => {
           </div>
 
           {/* Right Column: Contact Form Box */}
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-xs sm:p-8">
+          <div className="h-fit rounded-2xl border border-border bg-card p-6 shadow-xs sm:p-8">
             <h3 className="mb-4 font-serif text-xl font-bold text-foreground sm:text-2xl">
               Send Us a Message
             </h3>

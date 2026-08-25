@@ -72,10 +72,10 @@ export function Navbar() {
         {/* Desktop CTA Button */}
         <div className="hidden lg:block">
           <Link
-            href="/admission"
+            href="/login"
             className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            Apply Now
+           Login
           </Link>
         </div>
 
