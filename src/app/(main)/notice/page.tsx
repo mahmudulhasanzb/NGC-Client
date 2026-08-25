@@ -10,8 +10,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '1',
     title: 'HSC Admission 2026: Application Process and Schedule',
     slug: 'hsc-admission-2026',
-    content:
-      'Eligible applicants are invited to apply for Higher Secondary Certificate (HSC) classes for the academic session 2026-2027. Online application deadline is March 31, 2026. Required documents must be submitted to the college office.',
     category: 'Admission',
     is_pinned: true,
     published_at: '2026-03-01',
@@ -20,8 +18,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '2',
     title: 'Degree (Pass) 2nd Year Examination Form Fill-up Notice',
     slug: 'degree-2nd-year-form-fillup',
-    content:
-      'Students of Degree (Pass) & Certificate Course 2nd Year are hereby informed that the examination form fill-up will begin from next week through National University portal with prescribed fees.',
     category: 'Examination',
     is_pinned: true,
     published_at: '2026-02-28',
@@ -30,8 +26,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '3',
     title: 'Schedule of Annual Sports & Cultural Week 2026',
     slug: 'annual-sports-cultural-week-2026',
-    content:
-      'Nabiganj Government College Annual Sports & Cultural Competition 2026 will be held from March 15 to March 20 at the college central playground. Students can register their names with the physical instructor.',
     category: 'Events',
     is_pinned: false,
     published_at: '2026-02-25',
@@ -40,8 +34,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '4',
     title: 'Holiday Notice: Shab-e-Barat Observance',
     slug: 'holiday-notice-shab-e-barat',
-    content:
-      'The college administrative office and all academic classes will remain closed on the occasion of holy Shab-e-Barat. Normal academic and administrative activities resume on the next working day.',
     category: 'General',
     is_pinned: false,
     published_at: '2026-02-22',
@@ -50,8 +42,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '5',
     title: 'Distribution of National Merit Scholarships for Degree Students',
     slug: 'national-merit-scholarship-distribution',
-    content:
-      'Eligible students awarded government merit scholarships for the academic year 2025-2026 are requested to submit bank account details to the Accounts section before March 10.',
     category: 'Scholarship',
     is_pinned: false,
     published_at: '2026-02-18',
@@ -60,8 +50,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '6',
     title: 'HSC 1st Year Mid-term Examination Routine Published',
     slug: 'hsc-1st-year-midterm-routine',
-    content:
-      'The mid-term examination routine for HSC 1st Year Science, Humanities, and Business Studies groups has been published. All students are directed to check their respective department notice boards.',
     category: 'Examination',
     is_pinned: false,
     published_at: '2026-02-15',
@@ -70,8 +58,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '7',
     title: 'College Library Book Requisition and Renewal Schedule',
     slug: 'library-book-requisition-schedule',
-    content:
-      'The Central Library is accepting student book requisitions for the upcoming term. All issued books from the previous session must be returned or renewed by the end of this month.',
     category: 'Academic',
     is_pinned: false,
     published_at: '2026-02-10',
@@ -80,8 +66,6 @@ const allNoticesData: NoticeItem[] = [
     _id: '8',
     title: 'Inter-College Science Fair 2026 Participation Call',
     slug: 'science-fair-2026-participation',
-    content:
-      'Science Club invites project submissions from interested students for the upcoming Sylhet Divisional Inter-College Science Innovation Fair 2026.',
     category: 'Events',
     is_pinned: false,
     published_at: '2026-02-05',
@@ -104,7 +88,7 @@ const AllNoticesPage = () => {
       const query = search.toLowerCase();
       const matchesSearch =
         notice.title.toLowerCase().includes(query) ||
-        notice.content.toLowerCase().includes(query);
+        notice.category.toLowerCase().includes(query);
       const matchesCategory =
         selectedCategory === 'All' || notice.category === selectedCategory;
       return matchesSearch && matchesCategory;
