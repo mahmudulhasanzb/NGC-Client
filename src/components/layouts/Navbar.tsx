@@ -12,10 +12,10 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/admission', label: 'Admissions' },
-  { href: '/teachers', label: 'Faculty' },
   { href: '/notice', label: 'Notice' },
-  { href: '/moments', label: 'Moments' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/teacher', label: 'Teachers' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/#contact', label: 'Contact' },
 ];
 
 export function Navbar() {
