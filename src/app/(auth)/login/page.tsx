@@ -26,24 +26,35 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginFormInputs) => {
     setLoading(true);
+    const toastId = toast.loading('Verifying credentials...');
     try {
       const { data: response, error } = await authClient.signIn.email({
         email: data.email,
         password: data.password,
         rememberMe: data.rememberMe ?? true,
-        callbackURL: '/',
+        callbackURL: '/dashboard',
       });
 
       if (error) {
-        toast.error(error.message || 'Invalid email or password');
+        toast.error(
+          error.message ||
+            'Login failed. Please check your email and password.',
+          {
+            id: toastId,
+          },
+        );
         return;
       }
 
-      toast.success('Signed in successfully!');
-      router.push('/');
+      toast.success('Login successful!', {
+        id: toastId,
+      });
+      router.push('/dashboard');
       router.refresh();
     } catch {
-      toast.error('An unexpected error occurred. Please try again.');
+      toast.error('An unexpected login error occurred. Please try again.', {
+        id: toastId,
+      });
     } finally {
       setLoading(false);
     }
