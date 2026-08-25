@@ -13,7 +13,7 @@ const navLinks = [
   { href: '/about', label: 'About' },
   { href: '/admission', label: 'Admissions' },
   { href: '/teachers', label: 'Faculty' },
-  { href: '/noticeboard', label: 'Notices' },
+  { href: '/notice', label: 'Notice' },
   { href: '/moments', label: 'Moments' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -49,21 +49,24 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-1 lg:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'rounded-md px-3 py-2 text-sm font-medium transition-colors hover:text-primary',
-                pathname === link.href
-                  ? 'text-primary'
-                  : 'text-muted-foreground'
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-6 lg:flex">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'relative pb-1 text-sm font-medium transition-colors hover:text-primary',
+                  isActive
+                    ? 'font-bold text-foreground after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-primary'
+                    : 'text-muted-foreground'
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {/* Desktop CTA Button */}
