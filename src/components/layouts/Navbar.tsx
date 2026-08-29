@@ -6,7 +6,8 @@ import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@heroui/react';
-import Image from 'next/image';
+// import Image from 'next/image';
+import { authClient } from '@/lib/auth-client';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -20,6 +21,9 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log("session: ",user)
   const [open, setOpen] = useState(false);
 
   return (
@@ -50,7 +54,7 @@ export function Navbar() {
 
         {/* Desktop Navigation Links */}
         <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => {
+          {navLinks.map(link => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -60,7 +64,7 @@ export function Navbar() {
                   'relative pb-1 text-sm font-medium transition-colors hover:text-primary',
                   isActive
                     ? 'font-bold text-foreground after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-primary'
-                    : 'text-muted-foreground'
+                    : 'text-muted-foreground',
                 )}
               >
                 {link.label}
@@ -71,19 +75,36 @@ export function Navbar() {
 
         {/* Desktop CTA Button */}
         <div className="hidden lg:block">
-          <Link
-            href="/login"
-            className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-           Login
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                Dashboard
+              </Link>
+              <Button
+                onClick={() => authClient.signOut()}
+                className="inline-flex h-9 items-center justify-center rounded-md bg-red-500 px-3 text-sm font-medium text-white shadow transition-colors hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <span title="Logout from the account">Logout</span>
+              </Button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Login
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Toggle Button */}
         <Button
           type="button"
           className="inline-flex items-center justify-center rounded-md p-2 text-foreground lg:hidden"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(v => !v)}
           aria-label="Toggle menu"
           aria-expanded={open}
         >
@@ -95,7 +116,7 @@ export function Navbar() {
       {open && (
         <div className="border-t border-border bg-background lg:hidden">
           <nav className="mx-auto flex max-w-8xl flex-col gap-1 px-4 py-4 sm:px-6">
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -104,19 +125,48 @@ export function Navbar() {
                   'rounded-md px-3 py-2.5 text-sm font-medium transition-colors hover:bg-secondary',
                   pathname === link.href
                     ? 'bg-secondary text-primary'
-                    : 'text-muted-foreground'
+                    : 'text-muted-foreground',
                 )}
               >
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
-            >
-              Login
-            </Link>
+            {/* Admin only */}
+            {user ? (
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    'rounded-md  px-3 py-2.5 text-sm font-bold transition-colors hover:bg-secondary',
+                    pathname === '/dashboard'
+                      ? 'bg-secondary text-primary'
+                      : 'text-muted-foreground',
+                  )}
+                >
+                  Dashboard
+                </Link>
+                <Button
+                onClick={() => authClient.signOut()}
+                className="inline-flex h-9 items-center justify-center rounded-md bg-red-500 px-3 text-sm font-medium text-white shadow transition-colors hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-ring active:ring-0 "
+              >
+                <span title="Logout from the account">Logout</span>
+              </Button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className={cn(
+                  'rounded-md px-3 py-2.5 text-sm font-bold transition-colors hover:bg-secondary ',
+                  pathname === '/login'
+                    ? 'bg-secondary text-primary'
+                    : 'text-muted-foreground',
+                )}
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       )}
