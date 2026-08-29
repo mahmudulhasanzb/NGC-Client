@@ -7,7 +7,8 @@ export interface Teacher {
   name: string;
   designation: string;
   department: string;
-  photo?: string;
+  photo?: string | null;
+  photoUrl?: string | null;
 }
 
 interface TeacherCardProps {
@@ -15,13 +16,18 @@ interface TeacherCardProps {
 }
 
 const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
+  const imageSrc = teacher.photoUrl || teacher.photo;
+
   return (
-    <Link href={`/teacher/${teacher.id}`} className="group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md cursor-pointer ">
+    <Link
+      href={`/teacher/${teacher.id}`}
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md cursor-pointer"
+    >
       {/* Teacher Photo */}
       <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-secondary">
-        {teacher.photo ? (
+        {imageSrc ? (
           <img
-            src={teacher.photo}
+            src={imageSrc}
             alt={teacher.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -40,7 +46,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
       </div>
 
       {/* Name */}
-      <h3 className="font-serif text-sm font-bold leading-snug text-foreground sm:text-base ">
+      <h3 className="font-serif text-sm font-bold leading-snug text-foreground sm:text-base">
         {teacher.name}
       </h3>
 
