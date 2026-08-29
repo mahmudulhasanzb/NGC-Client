@@ -6,6 +6,7 @@ import { X, Loader2, Image as ImageIcon, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@heroui/react';
 import { serverMutation } from '@/lib/api/serverMutation';
+import { ImageUploader } from '@/components/common/ImageUploader';
 
 export interface GalleryItem {
   id: string;
@@ -56,6 +57,7 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<GalleryFormInputs>({
     defaultValues: {
@@ -227,42 +229,27 @@ export const GalleryFormModal: React.FC<GalleryFormModalProps> = ({
             </div>
           </div>
 
-          {/* Image URL */}
+          {/* Image Upload */}
           <div>
-            <label className="block text-xs font-bold text-foreground mb-1.5">
-              Image URL <span className="text-destructive">*</span>
-            </label>
-            <div className="flex gap-3">
-              <input
-                type="url"
-                {...register('imageUrl', {
-                  required: 'Image URL is required',
-                })}
-                placeholder="https://images.pexels.com/photos/..."
-                className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-              {imageUrlValue ? (
-                <div className="h-10 w-14 shrink-0 overflow-hidden rounded-xl border border-border bg-secondary">
-                  <img
-                    src={imageUrlValue}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                </div>
-              ) : (
-                <div className="flex h-10 w-14 shrink-0 items-center justify-center rounded-xl border border-border bg-secondary/50 text-muted-foreground">
-                  <ImageIcon className="h-4 w-4" />
-                </div>
-              )}
-            </div>
-            {errors.imageUrl && (
-              <span className="text-[11px] text-destructive mt-1 block">
-                {errors.imageUrl.message}
-              </span>
-            )}
+            <input
+              type="hidden"
+              {...register('imageUrl', {
+                required: 'Photo is required',
+              })}
+            />
+            <ImageUploader
+              label="Campus Photo"
+              value={imageUrlValue}
+              onChange={(url) =>
+                setValue('imageUrl', url, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
+              required={true}
+              error={errors.imageUrl?.message}
+              aspectRatio="video"
+            />
           </div>
 
           {/* Caption / Description */}

@@ -6,6 +6,7 @@ import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@heroui/react';
 import { serverMutation } from '@/lib/api/serverMutation';
+import { ImageUploader } from '@/components/common/ImageUploader';
 
 export interface Teacher {
   id: string;
@@ -93,6 +94,7 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TeacherFormInputs>({
     defaultValues: {
@@ -527,36 +529,25 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
             </div>
 
             <div className="mt-4">
-              <label className="block text-xs font-bold text-foreground mb-1.5">
-                Profile Photo URL <span className="text-destructive">*</span>
-              </label>
-              <div className="flex gap-3">
-                <input
-                  type="url"
-                  {...register('photoUrl', {
-                    required: 'Profile photo URL is required',
-                  })}
-                  placeholder="https://images.unsplash.com/photo-..."
-                  className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                {photoUrlValue && (
-                  <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-border bg-secondary">
-                    <img
-                      src={photoUrlValue}
-                      alt="Preview"
-                      className="h-full w-full object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-              {errors.photoUrl && (
-                <span className="text-[11px] text-destructive mt-1 block">
-                  {errors.photoUrl.message}
-                </span>
-              )}
+              <input
+                type="hidden"
+                {...register('photoUrl', {
+                  required: 'Profile photo is required',
+                })}
+              />
+              <ImageUploader
+                label="Profile Photo"
+                value={photoUrlValue}
+                onChange={(url) =>
+                  setValue('photoUrl', url, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
+                }
+                required={true}
+                error={errors.photoUrl?.message}
+                aspectRatio="square"
+              />
             </div>
           </div>
 

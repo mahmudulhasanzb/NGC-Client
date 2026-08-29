@@ -21,6 +21,7 @@ import {
 import toast from 'react-hot-toast';
 import { serverMutation } from '@/lib/api/serverMutation';
 import { EmbedVideoPlayer } from '@/components/common/EmbedVideoPlayer';
+import { ImageUploader } from '@/components/common/ImageUploader';
 
 export interface CollegeAboutData {
   id?: string;
@@ -53,6 +54,7 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<CollegeAboutData>({
     defaultValues: {
@@ -214,18 +216,20 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Video Cover Thumbnail URL (Optional)
-                </label>
-                <input
-                  type="url"
-                  {...register('videoThumbnail')}
-                  placeholder="https://images.pexels.com/photos/..."
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                <input type="hidden" {...register('videoThumbnail')} />
+                <ImageUploader
+                  label="Video Cover Thumbnail (Optional)"
+                  value={watch('videoThumbnail')}
+                  onChange={(url) =>
+                    setValue('videoThumbnail', url, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    })
+                  }
+                  required={false}
+                  helperText="Optional cover image to show on the homepage before the user clicks to watch."
+                  aspectRatio="video"
                 />
-                <span className="text-[11px] text-muted-foreground mt-1 block">
-                  Optional cover image to show on the homepage before the user clicks to watch.
-                </span>
               </div>
             </div>
 
