@@ -37,9 +37,6 @@ interface AboutSectionProps {
   aboutData?: AboutSectionData | null;
 }
 
-const defaultThumbnail =
-  'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
-
 const defaultEmbed =
   '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Nabiganj Government College Video Tour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
 
@@ -50,13 +47,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const subheading =
     aboutData?.subheading ||
     'Nabiganj Government College is a premier public institution fostering academic excellence across Science, Humanities, and Business Studies in Habiganj.';
-  const description1 =
-    aboutData?.description1 ||
-    'Established with the visionary goal of bringing accessible, top-tier education to the students of Nabiganj, the college has nurtured generations of scholars and leaders.';
   const establishedYear = aboutData?.establishedYear || '1984';
 
   const rawEmbed = aboutData?.videoEmbedUrl || defaultEmbed;
-  const thumbnail = aboutData?.videoThumbnail || defaultThumbnail;
+  const customThumbnail = aboutData?.videoThumbnail?.trim() || null;
 
   const corePillars = [
     {
@@ -99,27 +93,32 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
     <section className="py-12 sm:py-16 bg-background">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
-          {/* Left Column: Prominent Video Player (7 Columns) */}
+          {/* Left Column: Video Container (7 Columns) */}
           <div className="relative lg:col-span-7">
             <div
               onClick={() => setIsVideoOpen(true)}
               className="group relative aspect-[16/9] sm:aspect-[16/9.5] overflow-hidden rounded-2xl border border-border/80 bg-black shadow-lg transition-all duration-300 hover:border-primary/50 hover:shadow-2xl cursor-pointer"
             >
-              {/* Video Thumbnail */}
-              <img
-                src={thumbnail}
-                alt="Nabiganj Government College Video Tour"
-                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = defaultThumbnail;
-                }}
-              />
+              {customThumbnail ? (
+                /* Scenario A: User Provided Custom Thumbnail */
+                <>
+                  <img
+                    src={customThumbnail}
+                    alt="Nabiganj Government College Video Tour"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                  {/* Scrim Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/15 transition-opacity duration-300 group-hover:via-black/35" />
+                </>
+              ) : (
+                /* Scenario B: No Thumbnail Set -> Show Underlying Embedded Video with Click-Intercepting Transparent Overlay */
+                <div className="relative h-full w-full pointer-events-none">
+                  <EmbedVideoPlayer embedCode={rawEmbed} autoplay={false} />
+                </div>
+              )}
 
-              {/* Gradient Scrim */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/15 transition-opacity duration-300 group-hover:via-black/35" />
-
-              {/* Central Pulsing Play Trigger */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+              {/* Transparent Click-Intercepting Overlay with Custom Play Button */}
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/20 transition-colors duration-300 group-hover:bg-black/35 backdrop-blur-[0.5px]">
                 <div className="relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-2xl transition-all duration-300 group-hover:scale-110">
                   <span className="absolute inset-0 rounded-full bg-primary/40 animate-ping opacity-75" />
                   <span className="absolute -inset-2 rounded-full border border-primary/40 animate-pulse" />
@@ -131,7 +130,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               </div>
 
               {/* Bottom Caption Tag */}
-              <div className="absolute bottom-3 left-4 text-xs font-medium text-white/90 drop-shadow-sm">
+              <div className="absolute bottom-3 left-4 z-20 text-xs font-medium text-white/90 drop-shadow-sm">
                 Nabiganj Govt. College • Estd. {establishedYear}
               </div>
             </div>
@@ -213,7 +212,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
         </div>
       </div>
 
-      {/* Video Modal with EmbedVideoPlayer */}
+      {/* Video Modal with Auto-Play Enabled */}
       {isVideoOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-fade-in"
