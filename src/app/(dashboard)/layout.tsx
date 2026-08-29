@@ -1,11 +1,22 @@
-import React from 'react'
+import React from 'react';
+import DashboardSideBar from '@/components/layouts/DashboardSideBar';
 
-const layout = ({children} : {children: React.ReactNode}) => {
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      {children}
-    </div>
-  )
-}
+    <div className="flex min-h-screen bg-background">
+      {/* Sidebar */}
+      <DashboardSideBar />
 
-export default layout
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          <div className="mx-auto max-w-7xl">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardLayout;
