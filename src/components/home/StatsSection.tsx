@@ -1,67 +1,101 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Users, GraduationCap, Award, Building2, BookOpen, Library } from 'lucide-react';
+import {
+  Users,
+  GraduationCap,
+  Award,
+  Building2,
+  BookOpen,
+  Library,
+  Sparkles,
+} from 'lucide-react';
 
-interface StatItem {
+export interface CollegeStatItem {
   id: string;
-  icon: React.ComponentType<{ className?: string }>;
-  numericValue: number;
-  prefix?: string;
-  suffix: string;
   label: string;
-  description: string;
+  value: string;
+  icon?: string | null;
+  description?: string | null;
+  orderIndex?: number;
 }
 
-const statsData: StatItem[] = [
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Users,
+  GraduationCap,
+  Award,
+  Building2,
+  BookOpen,
+  Library,
+  Sparkles,
+};
+
+const fallbackStats: CollegeStatItem[] = [
   {
     id: 'students',
-    icon: Users,
-    numericValue: 4500,
-    suffix: '+',
     label: 'Enrolled Students',
-    description: 'Pursuing HSC & Degree academic programs',
+    value: '4500+',
+    icon: 'Users',
+    description: 'HSC & Degree programs',
   },
   {
     id: 'faculty',
-    icon: GraduationCap,
-    numericValue: 55,
-    suffix: '+',
     label: 'Expert Faculty',
-    description: 'Experienced government BCS cadre educators',
+    value: '55+',
+    icon: 'GraduationCap',
+    description: 'Govt. BCS Cadre educators',
   },
   {
     id: 'success-rate',
-    icon: Award,
-    numericValue: 98,
-    suffix: '%',
     label: 'Academic Success',
-    description: 'Consistent high pass rate in board exams',
+    value: '98%',
+    icon: 'Award',
+    description: 'Board examination pass rate',
   },
   {
     id: 'years',
-    icon: Building2,
-    numericValue: 40,
-    suffix: '+',
     label: 'Years of Heritage',
-    description: 'Serving the nation with pride since 1984',
+    value: '40+',
+    icon: 'Building2',
+    description: 'Established in 1984',
   },
 ];
+
+// Helper to parse numeric string like "4500+", "98%", "$500" into numeric value, prefix, suffix
+function parseStatValue(valStr: string) {
+  const numericMatch = valStr.match(/\d[\d,]*/);
+  if (!numericMatch) {
+    return { numericValue: 0, prefix: '', suffix: valStr, isNumeric: false };
+  }
+
+  const rawNum = numericMatch[0].replace(/,/g, '');
+  const num = parseInt(rawNum, 10);
+  const matchIndex = valStr.indexOf(numericMatch[0]);
+  const prefix = valStr.slice(0, matchIndex);
+  const suffix = valStr.slice(matchIndex + numericMatch[0].length);
+
+  return { numericValue: num, prefix, suffix, isNumeric: true };
+}
 
 function StatCounter({
   target,
   prefix = '',
   suffix = '',
+  isNumeric = true,
+  fallbackDisplay = '',
 }: {
   target: number;
   prefix?: string;
   suffix?: string;
+  isNumeric?: boolean;
+  fallbackDisplay?: string;
 }) {
   const [count, setCount] = useState(0);
   const counterRef = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
   useEffect(() => {
+    if (!isNumeric) return;
     const el = counterRef.current;
     if (!el) return;
 
@@ -69,8 +103,8 @@ function StatCounter({
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
-          const duration = 1600; // 1.6s
-          const steps = 40;
+          const duration = 1400; // 1.4s
+          const steps = 30;
           const stepTime = duration / steps;
           const increment = target / steps;
           let current = 0;
@@ -86,15 +120,26 @@ function StatCounter({
           }, stepTime);
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [target]);
+  }, [target, isNumeric]);
+
+  if (!isNumeric) {
+    return (
+      <div className="font-serif text-2xl font-bold tracking-tight text-primary sm:text-3xl">
+        {fallbackDisplay}
+      </div>
+    );
+  }
 
   return (
-    <div ref={counterRef} className="font-serif text-3xl font-bold tracking-tight text-primary sm:text-4xl lg:text-5xl">
+    <div
+      ref={counterRef}
+      className="font-serif text-2xl font-bold tracking-tight text-primary sm:text-3xl"
+    >
       {prefix}
       {count.toLocaleString()}
       {suffix}
@@ -102,47 +147,70 @@ function StatCounter({
   );
 }
 
-const StatsSection = () => {
+interface StatsSectionProps {
+  initialStats?: CollegeStatItem[];
+}
+
+const StatsSection: React.FC<StatsSectionProps> = ({ initialStats }) => {
+  // Display up to 4 stats for clean 4-column compact symmetry
+  const statsToDisplay =
+    initialStats && initialStats.length > 0
+      ? initialStats.slice(0, 4)
+      : fallbackStats;
+
   return (
-    <section className="relative border-y border-border/70 bg-secondary/30 py-16 sm:py-20">
+    <section className="border-y border-border/70 bg-secondary/20 py-10 sm:py-12">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <span className="inline-block text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+        {/* Compact Section Header */}
+        <div className="mx-auto mb-8 max-w-2xl text-center">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-primary sm:text-xs">
             Milestones & Impact
           </span>
-          <h2 className="mt-1 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+          <h2 className="mt-0.5 font-serif text-2xl font-bold text-foreground sm:text-3xl">
             Our Journey in Numbers
           </h2>
-          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-            Four decades of academic excellence, student empowerment, and national recognition
-          </p>
+          <div className="mx-auto mt-2 h-0.5 w-10 rounded-full bg-primary/60" />
         </div>
 
-        {/* Modern 4-Column Stat Cards */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {statsData.map((item) => {
-            const Icon = item.icon;
+        {/* Compact 4-Column Stat Cards */}
+        <div className="grid grid-cols-2 gap-3.5 sm:gap-4 lg:grid-cols-4">
+          {statsToDisplay.map((item, idx) => {
+            const IconComponent =
+              (item.icon && iconMap[item.icon]) || iconMap.Award || Award;
+            const parsed = parseStatValue(item.value || '0');
+
             return (
               <div
-                key={item.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
+                key={item.id || `stat-${idx}`}
+                className="group relative flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-xs"
               >
-                {/* Top: Icon + Label */}
+                {/* Header: Icon + Number */}
                 <div>
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary">
-                    <Icon className="h-6 w-6" />
+                  <div className="mb-2.5 flex items-center justify-between">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-primary">
+                      <IconComponent className="h-4 w-4" />
+                    </div>
                   </div>
-                  <StatCounter target={item.numericValue} prefix={item.prefix} suffix={item.suffix} />
-                  <h3 className="mt-2 font-serif text-base font-semibold text-foreground sm:text-lg">
+
+                  <StatCounter
+                    target={parsed.numericValue}
+                    prefix={parsed.prefix}
+                    suffix={parsed.suffix}
+                    isNumeric={parsed.isNumeric}
+                    fallbackDisplay={item.value}
+                  />
+
+                  <h3 className="mt-1 font-serif text-sm font-semibold text-foreground sm:text-base">
                     {item.label}
                   </h3>
                 </div>
 
-                {/* Bottom: Micro description */}
-                <p className="mt-3 border-t border-border/50 pt-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                  {item.description}
-                </p>
+                {/* Subtitle / Description */}
+                {item.description && (
+                  <p className="mt-2 border-t border-border/40 pt-2 text-[11px] leading-snug text-muted-foreground sm:text-xs">
+                    {item.description}
+                  </p>
+                )}
               </div>
             );
           })}
