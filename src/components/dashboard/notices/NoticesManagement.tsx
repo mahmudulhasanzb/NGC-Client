@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Plus,
   Search,
@@ -44,9 +45,16 @@ const categoryBadgeStyles: Record<string, string> = {
 export const NoticesManagement: React.FC<NoticesManagementProps> = ({
   initialNotices,
 }) => {
-  const [notices, setNotices] = useState<Notice[]>(initialNotices);
+  const router = useRouter();
+  const [notices, setNotices] = useState<Notice[]>(initialNotices || []);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+
+  useEffect(() => {
+    if (initialNotices) {
+      setNotices(initialNotices);
+    }
+  }, [initialNotices]);
 
   // Modals
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -91,10 +99,12 @@ export const NoticesManagement: React.FC<NoticesManagementProps> = ({
     } else {
       setNotices((prev) => [savedNotice, ...prev]);
     }
+    router.refresh();
   };
 
   const handleDeleteSuccess = (deletedId: string) => {
     setNotices((prev) => prev.filter((n) => n.id !== deletedId));
+    router.refresh();
   };
 
   // Toggle Featured status inline

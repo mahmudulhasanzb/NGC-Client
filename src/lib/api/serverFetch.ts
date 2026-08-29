@@ -2,16 +2,21 @@ import { baseUrl } from './baseUrl';
 
 export const serverFetch = async ({
   path,
-  revalidate = 60,
-  cache,
+  revalidate,
+  cache = 'no-store',
 }: {
   path: string;
   revalidate?: number;
   cache?: RequestCache;
 }) => {
   try {
+    const fetchOptions: RequestInit =
+      revalidate !== undefined
+        ? { next: { revalidate } }
+        : { cache: 'no-store' };
+
     const res = await fetch(`${baseUrl}/${path}`, {
-      ...(cache ? { cache } : { next: { revalidate } }),
+      ...fetchOptions,
     });
 
     if (!res.ok) {

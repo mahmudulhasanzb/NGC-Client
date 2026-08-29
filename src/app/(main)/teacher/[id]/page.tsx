@@ -13,7 +13,8 @@ import {
 } from 'lucide-react';
 import { serverFetch } from '@/lib/api/serverFetch';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 interface TeacherDetailPageProps {
   params: Promise<{ id: string }>;

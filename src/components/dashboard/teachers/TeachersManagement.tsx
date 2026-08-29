@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Plus,
   Search,
@@ -11,9 +12,6 @@ import {
   Edit2,
   Trash2,
   ExternalLink,
-  User,
-  Building,
-  Award,
 } from 'lucide-react';
 import { Teacher, TeacherFormModal } from './TeacherFormModal';
 import { DeleteTeacherModal } from './DeleteTeacherModal';
@@ -50,9 +48,17 @@ const departmentColors: Record<string, string> = {
 export const TeachersManagement: React.FC<TeachersManagementProps> = ({
   initialTeachers,
 }) => {
-  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
+  const router = useRouter();
+  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers || []);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDept, setSelectedDept] = useState('ALL');
+
+  // Keep state synced with server props
+  useEffect(() => {
+    if (initialTeachers) {
+      setTeachers(initialTeachers);
+    }
+  }, [initialTeachers]);
 
   // Modals
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -67,10 +73,10 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
       const matchesDept = selectedDept === 'ALL' || t.department === selectedDept;
       const q = searchQuery.toLowerCase();
       const matchesSearch =
-        t.name.toLowerCase().includes(q) ||
-        t.designation.toLowerCase().includes(q) ||
-        t.department.toLowerCase().includes(q) ||
-        t.qualification.toLowerCase().includes(q);
+        (t.name && t.name.toLowerCase().includes(q)) ||
+        (t.designation && t.designation.toLowerCase().includes(q)) ||
+        (t.department && t.department.toLowerCase().includes(q)) ||
+        (t.qualification && t.qualification.toLowerCase().includes(q));
       return matchesDept && matchesSearch;
     });
   }, [teachers, selectedDept, searchQuery]);
@@ -99,10 +105,12 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
     } else {
       setTeachers((prev) => [savedTeacher, ...prev]);
     }
+    router.refresh();
   };
 
   const handleDeleteSuccess = (deletedId: string) => {
     setTeachers((prev) => prev.filter((t) => t.id !== deletedId));
+    router.refresh();
   };
 
   return (
@@ -188,6 +196,8 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
                     departmentColors[teacher.department] ||
                     'bg-slate-500/10 text-slate-600 border-slate-500/20';
 
+                  const imageSrc = teacher.photoUrl;
+
                   return (
                     <tr
                       key={teacher.id}
@@ -197,9 +207,9 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
                       <td className="py-3.5 px-4 max-w-sm">
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-secondary flex items-center justify-center font-bold text-xs text-primary">
-                            {teacher.photoUrl ? (
+                            {imageSrc ? (
                               <img
-                                src={teacher.photoUrl}
+                                src={imageSrc}
                                 alt={teacher.name}
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
@@ -207,7 +217,7 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
                                 }}
                               />
                             ) : (
-                              teacher.name.charAt(0).toUpperCase()
+                              teacher.name?.charAt(0)?.toUpperCase() || 'T'
                             )}
                           </div>
                           <div className="min-w-0">
@@ -266,10 +276,10 @@ export const TeachersManagement: React.FC<TeachersManagementProps> = ({
                       <td className="py-3.5 px-4 text-right whitespace-nowrap">
                         <div className="inline-flex items-center gap-1">
                           <Link
-                            href="/teacher"
+                            href={`/teacher/${teacher.id}`}
                             target="_blank"
                             title="View on public directory"
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-primary transition-colors"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-primary transition-colors cursor-pointer"
                           >
                             <ExternalLink className="h-3.5 w-3.5" />
                           </Link>

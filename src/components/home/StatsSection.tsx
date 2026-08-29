@@ -30,36 +30,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Sparkles,
 };
 
-const fallbackStats: CollegeStatItem[] = [
-  {
-    id: 'students',
-    label: 'Enrolled Students',
-    value: '4500+',
-    icon: 'Users',
-    description: 'HSC & Degree programs',
-  },
-  {
-    id: 'faculty',
-    label: 'Expert Faculty',
-    value: '55+',
-    icon: 'GraduationCap',
-    description: 'Govt. BCS Cadre educators',
-  },
-  {
-    id: 'success-rate',
-    label: 'Academic Success',
-    value: '98%',
-    icon: 'Award',
-    description: 'Board examination pass rate',
-  },
-  {
-    id: 'years',
-    label: 'Years of Heritage',
-    value: '40+',
-    icon: 'Building2',
-    description: 'Established in 1984',
-  },
-];
+
 
 // Helper to parse numeric string like "4500+", "98%", "$500" into numeric value, prefix, suffix
 function parseStatValue(valStr: string) {
@@ -152,11 +123,10 @@ interface StatsSectionProps {
 }
 
 const StatsSection: React.FC<StatsSectionProps> = ({ initialStats }) => {
-  // Display up to 4 stats for clean 4-column compact symmetry
   const statsToDisplay =
-    initialStats && initialStats.length > 0
-      ? initialStats.slice(0, 4)
-      : fallbackStats;
+    initialStats && initialStats.length > 0 ? initialStats.slice(0, 4) : [];
+
+  if (statsToDisplay.length === 0) return null;
 
   return (
     <section className="border-y border-border/70 bg-secondary/20 py-10 sm:py-12">

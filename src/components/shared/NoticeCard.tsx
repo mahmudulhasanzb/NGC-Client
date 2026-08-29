@@ -4,13 +4,16 @@ import { Pin, Calendar, ArrowRight } from 'lucide-react';
 import { formatDate } from '@/lib/format';
 
 export interface NoticeItem {
-  _id?: string;
   id?: string;
+  _id?: string;
   slug?: string;
   title: string;
   category: string;
   is_pinned?: boolean;
-  published_at: string;
+  isFeatured?: boolean;
+  published_at?: string;
+  publishedAt?: string;
+  createdAt?: string;
 }
 
 interface NoticeCardProps {
@@ -23,12 +26,14 @@ export const NoticeCard: React.FC<NoticeCardProps> = ({ noticeData, notice }) =>
 
   if (!item) return null;
 
-  const targetId = item._id || item.id || item.slug || '';
+  const targetSlugOrId = item.slug || item.id || item._id || '';
+  const dateValue = item.publishedAt || item.published_at || item.createdAt || '';
+  const isPinned = item.isFeatured || item.is_pinned;
 
   return (
     <Link
-      href={`/notice/${targetId}`}
-      className="group flex flex-col justify-between rounded-xl border border-border bg-card p-3.5 transition-all hover:border-primary/40 hover:bg-secondary/15 hover:shadow-sm sm:p-4"
+      href={`/notice/${targetSlugOrId}`}
+      className="group flex flex-col justify-between rounded-xl border border-border bg-card p-3.5 transition-all hover:border-primary/40 hover:bg-secondary/15 hover:shadow-sm sm:p-4 cursor-pointer"
     >
       <div className="space-y-2">
         {/* Top: Category Badge & Pin */}
@@ -36,10 +41,10 @@ export const NoticeCard: React.FC<NoticeCardProps> = ({ noticeData, notice }) =>
           <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-[10px] font-semibold text-primary sm:text-xs">
             {item.category}
           </span>
-          {item.is_pinned && (
+          {isPinned && (
             <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent">
               <Pin className="h-3 w-3 fill-accent" />
-              <span>Pinned</span>
+              <span>Featured</span>
             </span>
           )}
         </div>
@@ -54,7 +59,7 @@ export const NoticeCard: React.FC<NoticeCardProps> = ({ noticeData, notice }) =>
       <div className="mt-3 flex items-center justify-between border-t border-border/50 pt-2.5 text-[11px] text-muted-foreground sm:text-xs">
         <div className="flex items-center gap-1.5">
           <Calendar className="h-3 w-3 text-primary" />
-          <span>{formatDate(item.published_at)}</span>
+          <span>{dateValue ? formatDate(dateValue) : 'Official Circular'}</span>
         </div>
         <span className="inline-flex items-center gap-1 font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
           <span>View</span>

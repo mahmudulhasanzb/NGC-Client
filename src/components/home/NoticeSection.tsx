@@ -1,50 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Bell } from 'lucide-react';
 import NoticeCard, { NoticeItem } from '../shared/NoticeCard';
-
-// Demo notice data matching college categories
-export const demoNotices: NoticeItem[] = [
-  {
-    _id: '1',
-    title: 'HSC Admission 2026: Application Process and Schedule',
-    slug: 'hsc-admission-2026',
-    category: 'Admission',
-    is_pinned: true,
-    published_at: '2026-03-01',
-  },
-  {
-    _id: '2',
-    title: 'Degree (Pass) 2nd Year Examination Form Fill-up Notice',
-    slug: 'degree-2nd-year-form-fillup',
-    category: 'Examination',
-    is_pinned: true,
-    published_at: '2026-02-28',
-  },
-  {
-    _id: '3',
-    title: 'Schedule of Annual Sports & Cultural Week 2026',
-    slug: 'annual-sports-cultural-week-2026',
-    category: 'Events',
-    is_pinned: false,
-    published_at: '2026-02-25',
-  },
-  {
-    _id: '4',
-    title: 'Holiday Notice: Shab-e-Barat Observance',
-    slug: 'holiday-notice-shab-e-barat',
-    category: 'General',
-    is_pinned: false,
-    published_at: '2026-02-22',
-  },
-];
 
 interface NoticeSectionProps {
   notices?: NoticeItem[];
 }
 
-const NoticeSection: React.FC<NoticeSectionProps> = ({ notices = demoNotices }) => {
+const NoticeSection: React.FC<NoticeSectionProps> = ({ notices = [] }) => {
   const featured = notices.slice(0, 4);
+
+  if (featured.length === 0) return null;
 
   return (
     <section className="bg-secondary/30 py-16 sm:py-20">
@@ -52,17 +18,21 @@ const NoticeSection: React.FC<NoticeSectionProps> = ({ notices = demoNotices }) 
         {/* Section Header */}
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <h2 className="mt-1 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary mb-1">
+              <Bell className="h-3.5 w-3.5" />
+              <span>Official Circulars</span>
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               Notice Board
             </h2>
             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-              Stay updated with the latest announcements, schedules, and academic news
+              Stay updated with official academic schedules, examination routines, and admission guidelines
             </p>
           </div>
 
           <Link
             href="/notice"
-            className="hidden items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80 sm:inline-flex"
+            className="hidden items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80 sm:inline-flex cursor-pointer"
           >
             View All Notices
             <ArrowRight className="h-4 w-4" />
@@ -72,7 +42,7 @@ const NoticeSection: React.FC<NoticeSectionProps> = ({ notices = demoNotices }) 
         {/* Notice Card inside Grid */}
         <div className="grid gap-5 sm:grid-cols-2">
           {featured.map((notice) => (
-            <NoticeCard key={notice._id || notice.id} noticeData={notice} />
+            <NoticeCard key={notice.id || notice._id || notice.slug} noticeData={notice} />
           ))}
         </div>
 
@@ -80,7 +50,7 @@ const NoticeSection: React.FC<NoticeSectionProps> = ({ notices = demoNotices }) 
         <div className="mt-8 text-center sm:hidden">
           <Link
             href="/notice"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline cursor-pointer"
           >
             View All Notices
             <ArrowRight className="h-4 w-4" />
