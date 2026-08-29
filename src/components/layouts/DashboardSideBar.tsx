@@ -17,6 +17,7 @@ import {
   Shield,
   Menu,
   X,
+  Info,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
@@ -36,6 +37,11 @@ const menuItems = [
     label: 'Teachers & Faculty',
     href: '/dashboard/teachers',
     icon: GraduationCap,
+  },
+  {
+    label: 'About College',
+    href: '/dashboard/about',
+    icon: Info,
   },
   {
     label: 'Gallery & Moments',

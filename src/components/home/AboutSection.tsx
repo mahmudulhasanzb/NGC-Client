@@ -15,36 +15,65 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@heroui/react';
+import { formatEmbedUrl } from '@/lib/embedUrl';
 
-// YouTube Video ID for the College Documentary / Campus Tour
-const YOUTUBE_VIDEO_ID = 'dQw4w9WgXcQ'; // Replace with actual YouTube video ID
+export interface AboutSectionData {
+  id?: string;
+  heading?: string;
+  subheading?: string;
+  description1?: string;
+  description2?: string;
+  videoEmbedUrl?: string;
+  videoThumbnail?: string | null;
+  missionText?: string;
+  visionText?: string;
+  valuesText?: string;
+  establishedYear?: string;
+  eiinNumber?: string;
+  collegeCode?: string;
+  nuCode?: string;
+}
 
-// Native YouTube HD thumbnail
-const videoThumbnail = `https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/maxresdefault.jpg`;
-const fallbackThumbnail = `https://img.youtube.com/vi/${YOUTUBE_VIDEO_ID}/hqdefault.jpg`;
-const collegeVideoEmbedUrl = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1`;
+interface AboutSectionProps {
+  aboutData?: AboutSectionData | null;
+}
 
-const corePillars = [
-  {
-    icon: Target,
-    title: 'Mission',
-    subtitle: 'Excellence',
-  },
-  {
-    icon: Eye,
-    title: 'Vision',
-    subtitle: 'Leadership',
-  },
-  {
-    icon: Heart,
-    title: 'Values',
-    subtitle: 'Integrity',
-  },
-];
+const defaultThumbnail =
+  'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
 
-const AboutSection = () => {
+const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  const [thumbSrc, setThumbSrc] = useState(videoThumbnail);
+
+  const heading = aboutData?.heading || '40+ Years of Academic Excellence';
+  const subheading =
+    aboutData?.subheading ||
+    'Nabiganj Government College is a premier public institution fostering academic excellence across Science, Humanities, and Business Studies in Habiganj.';
+  const description1 =
+    aboutData?.description1 ||
+    'Established with the visionary goal of bringing accessible, top-tier education to the students of Nabiganj, the college has nurtured generations of scholars and leaders.';
+  const establishedYear = aboutData?.establishedYear || '1984';
+
+  const rawEmbed = aboutData?.videoEmbedUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  const embedUrl = formatEmbedUrl(rawEmbed, true);
+  const thumbnail = aboutData?.videoThumbnail || defaultThumbnail;
+
+  const corePillars = [
+    {
+      icon: Target,
+      title: 'Mission',
+      subtitle: aboutData?.missionText || 'Excellence in teaching and learning',
+    },
+    {
+      icon: Eye,
+      title: 'Vision',
+      subtitle: aboutData?.visionText || 'Leadership in higher education',
+    },
+    {
+      icon: Heart,
+      title: 'Values',
+      subtitle: aboutData?.valuesText || 'Integrity, discipline, and community',
+    },
+  ];
 
   // Close video modal on ESC key & lock scroll
   useEffect(() => {
@@ -69,18 +98,20 @@ const AboutSection = () => {
     <section className="py-12 sm:py-16 bg-background">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-10">
-          {/* Left Column: Prominent Video Player (7 Columns - 58% width) */}
+          {/* Left Column: Prominent Video Player (7 Columns) */}
           <div className="relative lg:col-span-7">
             <div
               onClick={() => setIsVideoOpen(true)}
               className="group relative aspect-[16/9] sm:aspect-[16/9.5] overflow-hidden rounded-2xl border border-border/80 bg-black shadow-lg transition-all duration-300 hover:border-primary/50 hover:shadow-2xl cursor-pointer"
             >
-              {/* Native YouTube Thumbnail */}
+              {/* Video Thumbnail */}
               <img
-                src={thumbSrc}
-                onError={() => setThumbSrc(fallbackThumbnail)}
+                src={thumbnail}
                 alt="Nabiganj Government College Video Tour"
                 className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = defaultThumbnail;
+                }}
               />
 
               {/* Gradient Scrim */}
@@ -94,31 +125,33 @@ const AboutSection = () => {
                   <Play className="h-7 w-7 sm:h-9 sm:w-9 fill-current translate-x-0.5" />
                 </div>
                 <span className="rounded-full bg-black/75 px-4 py-1 text-xs font-semibold text-white backdrop-blur-md border border-white/10 tracking-wide">
-                  Click to Watch Campus Tour (3:45)
+                  Click to Watch Campus Tour
                 </span>
               </div>
 
               {/* Bottom Caption Tag */}
               <div className="absolute bottom-3 left-4 text-xs font-medium text-white/90 drop-shadow-sm">
-                Nabiganj Govt. College • Estd. 1984
+                Nabiganj Govt. College • Estd. {establishedYear}
               </div>
             </div>
 
-            {/* Floating 40+ Years Badge */}
+            {/* Floating Heritage Badge */}
             <div className="absolute -bottom-4 -right-3 hidden rounded-xl bg-primary px-4 py-2.5 text-primary-foreground shadow-xl sm:flex items-center gap-2.5 border border-primary-foreground/15">
               <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/10 text-accent">
                 <Award className="h-4 w-4" />
               </div>
               <div>
-                <div className="font-serif text-lg font-bold leading-tight">40+ Years</div>
+                <div className="font-serif text-lg font-bold leading-tight">
+                  Estd. {establishedYear}
+                </div>
                 <div className="text-[10px] text-primary-foreground/80 leading-none">
-                  Excellence Since 1984
+                  Legacy of Excellence
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Compact Narrative (5 Columns - 42% width) */}
+          {/* Right Column: Narrative (5 Columns) */}
           <div className="space-y-4 lg:col-span-5">
             <div>
               <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-0.5 text-xs font-semibold text-primary">
@@ -126,11 +159,10 @@ const AboutSection = () => {
                 <span>Institutional Legacy</span>
               </div>
               <h2 className="mt-1.5 font-serif text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                A Legacy of Learning Since 1984
+                {heading}
               </h2>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground sm:text-sm">
-                Nabiganj Government College is a premier public institution fostering academic 
-                excellence across Science, Humanities, and Business Studies in Habiganj.
+                {subheading}
               </p>
             </div>
 
@@ -149,8 +181,8 @@ const AboutSection = () => {
                     <div className="font-serif text-[11px] font-bold text-foreground">
                       {pillar.title}
                     </div>
-                    <div className="text-[10px] text-muted-foreground mt-0.5">
-                      {pillar.subtitle}
+                    <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
+                      {pillar.title}
                     </div>
                   </div>
                 );
@@ -180,7 +212,7 @@ const AboutSection = () => {
         </div>
       </div>
 
-      {/* Video Modal */}
+      {/* Video Modal with Dynamic Embed Link */}
       {isVideoOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-fade-in"
@@ -216,25 +248,15 @@ const AboutSection = () => {
                   </p>
                 </div>
               </div>
-
-              <a
-                href="https://www.youtube.com/@nabiganjgovernmentcollege"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-              >
-                <span>YouTube Channel</span>
-                <ExternalLink className="h-3 w-3" />
-              </a>
             </div>
 
             {/* Video Iframe Frame */}
             <div className="relative aspect-video w-full bg-black">
               <iframe
-                src={collegeVideoEmbedUrl}
+                src={embedUrl}
                 title="Nabiganj Government College Campus Documentary"
                 className="h-full w-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               />
             </div>
