@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@heroui/react';
@@ -12,18 +13,34 @@ export interface Teacher {
   designation: string;
   department: string;
   qualification: string;
-  presentAddress?: string | null;
-  permanentAddress?: string | null;
-  mpoIndexNo?: string | null;
-  joiningDate?: string | null;
-  experience?: string | null;
-  interest?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  photoUrl?: string | null;
-  bio?: string | null;
+  presentAddress: string;
+  permanentAddress: string;
+  mpoIndexNo: string;
+  joiningDate: string;
+  experience: string;
+  interest: string;
+  email: string;
+  phone: string;
+  photoUrl: string;
   orderIndex: number;
   createdAt?: string;
+}
+
+export interface TeacherFormInputs {
+  name: string;
+  designation: string;
+  department: string;
+  qualification: string;
+  presentAddress: string;
+  permanentAddress: string;
+  mpoIndexNo: string;
+  joiningDate: string;
+  experience: string;
+  interest: string;
+  email: string;
+  phone: string;
+  photoUrl: string;
+  orderIndex: number;
 }
 
 interface TeacherFormModalProps {
@@ -43,8 +60,25 @@ const departments = [
   'Business Studies',
   'ICT & Computer Science',
   'Administration',
+  'Political Science',
+  'History',
+  'Philosophy',
   'Other',
 ];
+
+// Helper to format date string into YYYY-MM-DD for <input type="date" />
+function formatDateForInput(dateStr?: string | null): string {
+  if (!dateStr) return '';
+  // If already in YYYY-MM-DD format
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return dateStr;
+  }
+  const parsed = new Date(dateStr);
+  if (!isNaN(parsed.getTime())) {
+    return parsed.toISOString().split('T')[0];
+  }
+  return '';
+}
 
 export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
   isOpen,
@@ -53,103 +87,96 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
   teacherToEdit,
 }) => {
   const isEdit = Boolean(teacherToEdit);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    designation: '',
-    department: 'Bangla',
-    qualification: '',
-    presentAddress: '',
-    permanentAddress: '',
-    mpoIndexNo: '',
-    joiningDate: '',
-    experience: '',
-    interest: '',
-    email: '',
-    phone: '',
-    photoUrl: '',
-    bio: '',
-    orderIndex: 0,
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<TeacherFormInputs>({
+    defaultValues: {
+      name: '',
+      designation: '',
+      department: 'Bangla',
+      qualification: '',
+      presentAddress: '',
+      permanentAddress: '',
+      mpoIndexNo: '',
+      joiningDate: '',
+      experience: '',
+      interest: '',
+      email: '',
+      phone: '',
+      photoUrl: '',
+      orderIndex: 0,
+    },
   });
 
+  const photoUrlValue = watch('photoUrl');
+
   useEffect(() => {
-    if (teacherToEdit) {
-      setFormData({
-        name: teacherToEdit.name || '',
-        designation: teacherToEdit.designation || '',
-        department: teacherToEdit.department || 'Bangla',
-        qualification: teacherToEdit.qualification || '',
-        presentAddress: teacherToEdit.presentAddress || '',
-        permanentAddress: teacherToEdit.permanentAddress || '',
-        mpoIndexNo: teacherToEdit.mpoIndexNo || '',
-        joiningDate: teacherToEdit.joiningDate || '',
-        experience: teacherToEdit.experience || '',
-        interest: teacherToEdit.interest || '',
-        email: teacherToEdit.email || '',
-        phone: teacherToEdit.phone || '',
-        photoUrl: teacherToEdit.photoUrl || '',
-        bio: teacherToEdit.bio || '',
-        orderIndex: teacherToEdit.orderIndex || 0,
-      });
-    } else {
-      setFormData({
-        name: '',
-        designation: '',
-        department: 'Bangla',
-        qualification: '',
-        presentAddress: '',
-        permanentAddress: '',
-        mpoIndexNo: '',
-        joiningDate: '',
-        experience: '',
-        interest: '',
-        email: '',
-        phone: '',
-        photoUrl: '',
-        bio: '',
-        orderIndex: 0,
-      });
+    if (isOpen) {
+      if (teacherToEdit) {
+        reset({
+          name: teacherToEdit.name || '',
+          designation: teacherToEdit.designation || '',
+          department: teacherToEdit.department || 'Bangla',
+          qualification: teacherToEdit.qualification || '',
+          presentAddress: teacherToEdit.presentAddress || '',
+          permanentAddress: teacherToEdit.permanentAddress || '',
+          mpoIndexNo: teacherToEdit.mpoIndexNo || '',
+          joiningDate: formatDateForInput(teacherToEdit.joiningDate),
+          experience: teacherToEdit.experience || '',
+          interest: teacherToEdit.interest || '',
+          email: teacherToEdit.email || '',
+          phone: teacherToEdit.phone || '',
+          photoUrl: teacherToEdit.photoUrl || '',
+          orderIndex: teacherToEdit.orderIndex ?? 0,
+        });
+      } else {
+        reset({
+          name: '',
+          designation: '',
+          department: 'Bangla',
+          qualification: '',
+          presentAddress: '',
+          permanentAddress: '',
+          mpoIndexNo: '',
+          joiningDate: '',
+          experience: '',
+          interest: '',
+          email: '',
+          phone: '',
+          photoUrl: '',
+          orderIndex: 0,
+        });
+      }
     }
-  }, [teacherToEdit, isOpen]);
+  }, [teacherToEdit, isOpen, reset]);
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name.trim()) {
-      toast.error('Teacher full name is required');
-      return;
-    }
-    if (!formData.designation.trim()) {
-      toast.error('Designation is required');
-      return;
-    }
-    if (!formData.qualification.trim()) {
-      toast.error('Academic qualifications are required');
-      return;
-    }
-
-    setLoading(true);
+  const onSubmit = async (data: TeacherFormInputs) => {
     const toastId = toast.loading(
       isEdit ? 'Updating faculty profile...' : 'Adding faculty member...',
     );
 
     const payload = {
-      name: formData.name.trim(),
-      designation: formData.designation.trim(),
-      department: formData.department,
-      qualification: formData.qualification.trim(),
-      presentAddress: formData.presentAddress.trim() || null,
-      permanentAddress: formData.permanentAddress.trim() || null,
-      mpoIndexNo: formData.mpoIndexNo.trim() || null,
-      joiningDate: formData.joiningDate.trim() || null,
-      experience: formData.experience.trim() || null,
-      interest: formData.interest.trim() || null,
-      email: formData.email.trim() || null,
-      phone: formData.phone.trim() || null,
-      photoUrl: formData.photoUrl.trim() || null,
-      bio: formData.bio.trim() || null,
-      orderIndex: Number(formData.orderIndex) || 0,
+      name: data.name.trim(),
+      designation: data.designation.trim(),
+      department: data.department,
+      qualification: data.qualification.trim(),
+      presentAddress: data.presentAddress.trim(),
+      permanentAddress: data.permanentAddress.trim(),
+      mpoIndexNo: data.mpoIndexNo.trim(),
+      joiningDate: data.joiningDate,
+      experience: data.experience.trim(),
+      interest: data.interest.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      photoUrl: data.photoUrl.trim(),
+      orderIndex: Number(data.orderIndex) || 0,
     };
 
     try {
@@ -186,8 +213,6 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
       toast.error(error.message || 'An error occurred while saving teacher', {
         id: toastId,
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -208,8 +233,8 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
             </h3>
             <p className="text-xs text-muted-foreground">
               {isEdit
-                ? 'Update educator qualifications, career info, address, or designation'
-                : 'Register government BCS cadre professor or lecturer with full profile'}
+                ? 'Update educator qualifications, service info, addresses, or designation'
+                : 'Register government BCS cadre educator with complete profile details'}
             </p>
           </div>
           <Button
@@ -221,15 +246,15 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
           </Button>
         </div>
 
-        {/* Form Body */}
+        {/* Form Body with React Hook Form */}
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="p-6 space-y-4 max-h-[calc(85vh-80px)] overflow-y-auto"
         >
           {/* Section 1: Basic Identity */}
           <div className="border-b border-border/60 pb-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-wider text-primary mb-3">
-              Basic Identification
+              1. Basic Identification & Role
             </h4>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
@@ -238,12 +263,15 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  {...register('name', { required: 'Full name is required' })}
                   placeholder="e.g. Prof. Md. Safiqul Islam"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  required
                 />
+                {errors.name && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.name.message}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -252,14 +280,15 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
                 </label>
                 <input
                   type="text"
-                  value={formData.designation}
-                  onChange={(e) =>
-                    setFormData({ ...formData, designation: e.target.value })
-                  }
+                  {...register('designation', { required: 'Designation is required' })}
                   placeholder="e.g. Associate Professor & Head of Dept."
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  required
                 />
+                {errors.designation && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.designation.message}
+                  </span>
+                )}
               </div>
 
               <div>
@@ -267,10 +296,7 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
                   Department <span className="text-destructive">*</span>
                 </label>
                 <select
-                  value={formData.department}
-                  onChange={(e) =>
-                    setFormData({ ...formData, department: e.target.value })
-                  }
+                  {...register('department', { required: 'Department is required' })}
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
                 >
                   {departments.map((dept) => (
@@ -283,20 +309,22 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Display Order Index <span className="text-muted-foreground font-normal">(Lower displays first)</span>
+                  Display Order Index <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="number"
-                  value={formData.orderIndex}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      orderIndex: parseInt(e.target.value) || 0,
-                    })
-                  }
+                  {...register('orderIndex', {
+                    valueAsNumber: true,
+                    required: 'Order index is required',
+                  })}
                   placeholder="1"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.orderIndex && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.orderIndex.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -306,81 +334,99 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
               </label>
               <input
                 type="text"
-                value={formData.qualification}
-                onChange={(e) =>
-                  setFormData({ ...formData, qualification: e.target.value })
-                }
-                placeholder="e.g. B.Sc (Hons), M.Sc (DU), BCS (General Education)"
+                {...register('qualification', {
+                  required: 'Academic qualifications are required',
+                })}
+                placeholder="e.g. B.Sc (Hons), M.Sc in Physics (DU), 14th BCS (General Education)"
                 className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                required
               />
+              {errors.qualification && (
+                <span className="text-[11px] text-destructive mt-1 block">
+                  {errors.qualification.message}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Section 2: Workplace & Institutional Details */}
+          {/* Section 2: Workplace & Service Details */}
           <div className="border-b border-border/60 pb-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-wider text-primary mb-3">
-              Workplace & Service Details
+              2. Workplace & Institutional Details
             </h4>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  MPO Index No.
+                  MPO Index No. <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
-                  value={formData.mpoIndexNo}
-                  onChange={(e) =>
-                    setFormData({ ...formData, mpoIndexNo: e.target.value })
-                  }
+                  {...register('mpoIndexNo', {
+                    required: 'MPO Index Number is required',
+                  })}
                   placeholder="e.g. N406889"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.mpoIndexNo && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.mpoIndexNo.message}
+                  </span>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Joining Date
+                  Joining Date (Select via Calendar) <span className="text-destructive">*</span>
                 </label>
                 <input
-                  type="text"
-                  value={formData.joiningDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, joiningDate: e.target.value })
-                  }
-                  placeholder="e.g. 30 Jul, 1994"
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  type="date"
+                  {...register('joiningDate', {
+                    required: 'Joining date is required',
+                  })}
+                  className="w-full rounded-xl border border-border bg-background px-3.5 py-2 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
                 />
+                {errors.joiningDate && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.joiningDate.message}
+                  </span>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Teaching Experience
+                  Teaching Experience <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
-                  value={formData.experience}
-                  onChange={(e) =>
-                    setFormData({ ...formData, experience: e.target.value })
-                  }
-                  placeholder="e.g. 24 Years of Academic Leadership & Teaching"
+                  {...register('experience', {
+                    required: 'Teaching experience details are required',
+                  })}
+                  placeholder="e.g. 24+ Years of Academic Administration & Teaching"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.experience && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.experience.message}
+                  </span>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Academic & Research Interests
+                  Academic & Research Interests <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="text"
-                  value={formData.interest}
-                  onChange={(e) =>
-                    setFormData({ ...formData, interest: e.target.value })
-                  }
-                  placeholder="e.g. Quantum Mechanics, Solid State Physics, Optics"
+                  {...register('interest', {
+                    required: 'Academic & research interests are required',
+                  })}
+                  placeholder="e.g. Quantum Physics, Solid State Physics, Optics"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.interest && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.interest.message}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -388,37 +434,45 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
           {/* Section 3: Addresses */}
           <div className="border-b border-border/60 pb-4">
             <h4 className="font-serif text-xs font-bold uppercase tracking-wider text-primary mb-3">
-              Residential Addresses
+              3. Residential Addresses
             </h4>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Present Address
+                  Present Address <span className="text-destructive">*</span>
                 </label>
                 <textarea
                   rows={2}
-                  value={formData.presentAddress}
-                  onChange={(e) =>
-                    setFormData({ ...formData, presentAddress: e.target.value })
-                  }
-                  placeholder="e.g. College Quarter, Nabiganj Govt. College, Habiganj"
+                  {...register('presentAddress', {
+                    required: 'Present address is required',
+                  })}
+                  placeholder="e.g. College Quarter, Nabiganj Govt. College Campus, Nabiganj, Habiganj"
                   className="w-full rounded-xl border border-border bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.presentAddress && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.presentAddress.message}
+                  </span>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Permanent Address
+                  Permanent Address <span className="text-destructive">*</span>
                 </label>
                 <textarea
                   rows={2}
-                  value={formData.permanentAddress}
-                  onChange={(e) =>
-                    setFormData({ ...formData, permanentAddress: e.target.value })
-                  }
-                  placeholder="e.g. Vill: Shibpasha, Post: Nabiganj, Dist: Habiganj"
+                  {...register('permanentAddress', {
+                    required: 'Permanent address is required',
+                  })}
+                  placeholder="e.g. Vill: Shibpasha, Post: Nabiganj, Upazila: Nabiganj, Dist: Habiganj"
                   className="w-full rounded-xl border border-border bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.permanentAddress && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.permanentAddress.message}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -426,58 +480,69 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
           {/* Section 4: Contact & Photo */}
           <div>
             <h4 className="font-serif text-xs font-bold uppercase tracking-wider text-primary mb-3">
-              Contact & Profile Media
+              4. Contact Info & Profile Photo
             </h4>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Official Email
+                  Official Email <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  {...register('email', {
+                    required: 'Email address is required',
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: 'Enter a valid email address',
+                    },
+                  })}
                   placeholder="teacher@ngc.edu.bd"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.email && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.email.message}
+                  </span>
+                )}
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Contact Phone
+                  Contact Phone Number <span className="text-destructive">*</span>
                 </label>
                 <input
                   type="tel"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
+                  {...register('phone', {
+                    required: 'Phone number is required',
+                  })}
                   placeholder="+880 1711-XXXXXX"
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
+                {errors.phone && (
+                  <span className="text-[11px] text-destructive mt-1 block">
+                    {errors.phone.message}
+                  </span>
+                )}
               </div>
             </div>
 
             <div className="mt-4">
               <label className="block text-xs font-bold text-foreground mb-1.5">
-                Profile Photo URL
+                Profile Photo URL <span className="text-destructive">*</span>
               </label>
               <div className="flex gap-3">
                 <input
                   type="url"
-                  value={formData.photoUrl}
-                  onChange={(e) =>
-                    setFormData({ ...formData, photoUrl: e.target.value })
-                  }
+                  {...register('photoUrl', {
+                    required: 'Profile photo URL is required',
+                  })}
                   placeholder="https://images.unsplash.com/photo-..."
                   className="flex-1 rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
-                {formData.photoUrl && (
+                {photoUrlValue && (
                   <div className="h-10 w-10 shrink-0 overflow-hidden rounded-xl border border-border bg-secondary">
                     <img
-                      src={formData.photoUrl}
+                      src={photoUrlValue}
                       alt="Preview"
                       className="h-full w-full object-cover"
                       onError={(e) => {
@@ -487,21 +552,11 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="mt-4">
-              <label className="block text-xs font-bold text-foreground mb-1.5">
-                Biography / Brief Overview
-              </label>
-              <textarea
-                rows={2}
-                value={formData.bio}
-                onChange={(e) =>
-                  setFormData({ ...formData, bio: e.target.value })
-                }
-                placeholder="Brief summary of teaching philosophy, research publications..."
-                className="w-full rounded-xl border border-border bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-              />
+              {errors.photoUrl && (
+                <span className="text-[11px] text-destructive mt-1 block">
+                  {errors.photoUrl.message}
+                </span>
+              )}
             </div>
           </div>
 
@@ -509,7 +564,7 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/70">
             <button
               type="button"
-              disabled={loading}
+              disabled={isSubmitting}
               onClick={onClose}
               className="rounded-xl border border-border px-4 py-2 text-xs font-semibold text-foreground hover:bg-secondary cursor-pointer"
             >
@@ -517,10 +572,10 @@ export const TeacherFormModal: React.FC<TeacherFormModalProps> = ({
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={isSubmitting}
               className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-50 cursor-pointer shadow-xs"
             >
-              {loading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {isSubmitting && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               <span>{isEdit ? 'Save Changes' : 'Add Teacher'}</span>
             </button>
           </div>

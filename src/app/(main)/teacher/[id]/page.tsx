@@ -13,6 +13,7 @@ import {
   Mail,
 } from 'lucide-react';
 import { serverFetch } from '@/lib/api/serverFetch';
+import { formatDate } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -216,7 +217,9 @@ export default async function TeacherDetailsPage({
                         Joining Date
                       </span>
                       <p className="mt-0.5 text-sm font-semibold text-foreground">
-                        {teacher.joiningDate || 'Regular BCS Batch'}
+                        {teacher.joiningDate
+                          ? formatDate(teacher.joiningDate)
+                          : 'Regular BCS Batch'}
                       </p>
                     </div>
                   </div>
