@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -16,11 +16,11 @@ import {
   Heart,
   HelpCircle,
   Play,
-  CheckCircle2,
+  Code2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { serverMutation } from '@/lib/api/serverMutation';
-import { formatEmbedUrl } from '@/lib/embedUrl';
+import { EmbedVideoPlayer } from '@/components/common/EmbedVideoPlayer';
 
 export interface CollegeAboutData {
   id?: string;
@@ -53,7 +53,6 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors, isSubmitting, isDirty },
   } = useForm<CollegeAboutData>({
     defaultValues: {
@@ -82,29 +81,16 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
   });
 
   const rawVideoInput = watch('videoEmbedUrl');
-  const [activeEmbedUrl, setActiveEmbedUrl] = useState<string>('');
-
-  useEffect(() => {
-    if (rawVideoInput) {
-      const formatted = formatEmbedUrl(rawVideoInput);
-      setActiveEmbedUrl(formatted);
-    } else {
-      setActiveEmbedUrl('');
-    }
-  }, [rawVideoInput]);
 
   const onSubmit = async (data: CollegeAboutData) => {
     const toastId = toast.loading('Publishing institutional about details...');
-
-    // Automatically clean and normalize the video embed URL before saving
-    const cleanedEmbedUrl = formatEmbedUrl(data.videoEmbedUrl);
 
     const payload = {
       heading: data.heading.trim(),
       subheading: data.subheading.trim(),
       description1: data.description1.trim(),
       description2: data.description2.trim(),
-      videoEmbedUrl: cleanedEmbedUrl,
+      videoEmbedUrl: data.videoEmbedUrl.trim(),
       videoThumbnail: data.videoThumbnail?.trim() || null,
       missionText: data.missionText.trim(),
       visionText: data.visionText.trim(),
@@ -126,7 +112,6 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
         toast.success('About College information updated successfully!', {
           id: toastId,
         });
-        setValue('videoEmbedUrl', cleanedEmbedUrl);
         router.refresh();
       } else {
         toast.error(res?.message || 'Failed to update about details', {
@@ -153,7 +138,7 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
             Manage About Information & Video Tour
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Update college narrative, mission, vision, official institutional codes, and interactive video embeds (YouTube, Facebook, Vimeo, iframe).
+            Update college narrative, mission, vision, official institutional codes, and paste raw iframe embed codes from YouTube, Facebook, Vimeo, etc.
           </p>
         </div>
 
@@ -178,7 +163,7 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Section 1: Video Embed & Media Tour */}
+        {/* Section 1: Video Embed Code (Iframe) */}
         <div className="rounded-2xl border border-border bg-card p-6 shadow-xs space-y-5">
           <div className="flex items-center justify-between border-b border-border/70 pb-3">
             <div className="flex items-center gap-2.5">
@@ -187,15 +172,16 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
               </div>
               <div>
                 <h2 className="font-serif text-base font-bold text-foreground">
-                  Virtual Campus Tour / Video Embed
+                  Virtual Campus Tour / Video Embed Code (Iframe)
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  Supports YouTube, Facebook Videos, Vimeo, or any iframe embed code.
+                  Paste the full embed code (with &lt;iframe&gt;) from YouTube, Facebook, Vimeo, or any platform.
                 </p>
               </div>
             </div>
-            <span className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-bold text-primary">
-              Interactive Embed
+            <span className="rounded-md bg-secondary px-2.5 py-1 text-[10px] font-bold text-primary flex items-center gap-1">
+              <Code2 className="h-3.5 w-3.5" />
+              Raw Iframe Embed
             </span>
           </div>
 
@@ -204,15 +190,15 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
             <div className="space-y-4 lg:col-span-6">
               <div>
                 <label className="block text-xs font-bold text-foreground mb-1.5">
-                  Video Embed URL or Iframe Code <span className="text-destructive">*</span>
+                  Paste Embed Code (&lt;iframe ...&gt;&lt;/iframe&gt;) <span className="text-destructive">*</span>
                 </label>
                 <textarea
-                  rows={3}
+                  rows={5}
                   {...register('videoEmbedUrl', {
-                    required: 'Video embed URL or iframe code is required',
+                    required: 'Video embed code is required',
                   })}
-                  placeholder="Paste YouTube watch link (https://www.youtube.com/watch?v=...), Facebook video URL, or <iframe src='...'></iframe>"
-                  className="w-full rounded-xl border border-border bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono"
+                  placeholder='<iframe width="560" height="315" src="https://www.youtube.com/embed/..." title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+                  className="w-full rounded-xl border border-border bg-background p-3 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary font-mono leading-relaxed"
                 />
                 {errors.videoEmbedUrl && (
                   <span className="text-[11px] text-destructive mt-1 block">
@@ -222,7 +208,7 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
                 <div className="mt-1.5 flex items-start gap-1.5 text-[11px] text-muted-foreground">
                   <HelpCircle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary" />
                   <span>
-                    You can paste any embed link directly from YouTube, Facebook plugins, Vimeo, or standard `&lt;iframe&gt;` snippets. It will automatically extract and sanitize the embed source.
+                    You can paste any embed code with <code>&lt;iframe&gt;</code> directly from YouTube (Share &gt; Embed), Facebook Video Embed code, Vimeo, or any other video hosting provider.
                   </span>
                 </div>
               </div>
@@ -238,7 +224,7 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <span className="text-[11px] text-muted-foreground mt-1 block">
-                  Leave empty to automatically use default high-resolution campus photography.
+                  Optional cover image to show on the homepage before the user clicks to watch.
                 </span>
               </div>
             </div>
@@ -249,33 +235,18 @@ export const AboutManagement: React.FC<AboutManagementProps> = ({
                 Live Embed Player Preview
               </label>
               <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-black shadow-inner flex items-center justify-center">
-                {activeEmbedUrl ? (
-                  <iframe
-                    src={activeEmbedUrl}
-                    title="Live Video Embed Preview"
-                    className="h-full w-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                {rawVideoInput ? (
+                  <EmbedVideoPlayer embedCode={rawVideoInput} />
                 ) : (
                   <div className="flex flex-col items-center justify-center p-6 text-center text-muted-foreground">
                     <Play className="h-10 w-10 text-muted-foreground/40 mb-2" />
-                    <p className="font-serif text-xs font-bold">No active video embed URL</p>
+                    <p className="font-serif text-xs font-bold">No embed code entered</p>
                     <p className="text-[11px] text-muted-foreground">
-                      Paste a video embed link above to preview player
+                      Paste an iframe embed code on the left to preview the video player here.
                     </p>
                   </div>
                 )}
               </div>
-              {activeEmbedUrl && (
-                <div className="mt-2 flex items-center gap-1.5 text-[11px] text-emerald-600 font-medium">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  <span>Detected Clean Embed URL:</span>
-                  <span className="font-mono text-foreground truncate max-w-[280px]">
-                    {activeEmbedUrl}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         </div>

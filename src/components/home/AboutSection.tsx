@@ -11,11 +11,10 @@ import {
   X,
   Award,
   Video,
-  ExternalLink,
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@heroui/react';
-import { formatEmbedUrl } from '@/lib/embedUrl';
+import { EmbedVideoPlayer } from '@/components/common/EmbedVideoPlayer';
 
 export interface AboutSectionData {
   id?: string;
@@ -41,6 +40,9 @@ interface AboutSectionProps {
 const defaultThumbnail =
   'https://images.pexels.com/photos/207691/pexels-photo-207691.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop';
 
+const defaultEmbed =
+  '<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Nabiganj Government College Video Tour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+
 const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
 
@@ -53,8 +55,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
     'Established with the visionary goal of bringing accessible, top-tier education to the students of Nabiganj, the college has nurtured generations of scholars and leaders.';
   const establishedYear = aboutData?.establishedYear || '1984';
 
-  const rawEmbed = aboutData?.videoEmbedUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ';
-  const embedUrl = formatEmbedUrl(rawEmbed, true);
+  const rawEmbed = aboutData?.videoEmbedUrl || defaultEmbed;
   const thumbnail = aboutData?.videoThumbnail || defaultThumbnail;
 
   const corePillars = [
@@ -212,7 +213,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
         </div>
       </div>
 
-      {/* Video Modal with Dynamic Embed Link */}
+      {/* Video Modal with EmbedVideoPlayer */}
       {isVideoOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-fade-in"
@@ -250,15 +251,9 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               </div>
             </div>
 
-            {/* Video Iframe Frame */}
+            {/* Video Iframe Frame with Auto-Play */}
             <div className="relative aspect-video w-full bg-black">
-              <iframe
-                src={embedUrl}
-                title="Nabiganj Government College Campus Documentary"
-                className="h-full w-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
+              <EmbedVideoPlayer embedCode={rawEmbed} autoplay={true} />
             </div>
           </div>
         </div>

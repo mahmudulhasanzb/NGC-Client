@@ -14,7 +14,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { serverFetch } from '@/lib/api/serverFetch';
-import { formatEmbedUrl } from '@/lib/embedUrl';
+import { EmbedVideoPlayer } from '@/components/common/EmbedVideoPlayer';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -70,10 +70,6 @@ export default async function AboutPage() {
   const eiinNumber = about.eiinNumber || '129524';
   const collegeCode = about.collegeCode || '1301';
   const nuCode = about.nuCode || '1706';
-
-  const embedUrl = formatEmbedUrl(
-    about.videoEmbedUrl || 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-  );
 
   return (
     <div className="w-full bg-background">
@@ -153,12 +149,11 @@ export default async function AboutPage() {
                   </span>
                 </div>
                 <div className="relative aspect-video w-full bg-black">
-                  <iframe
-                    src={embedUrl}
-                    title="Nabiganj Government College Virtual Tour"
-                    className="h-full w-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
+                  <EmbedVideoPlayer
+                    embedCode={
+                      about.videoEmbedUrl ||
+                      '<iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>'
+                    }
                   />
                 </div>
               </div>
