@@ -4,12 +4,13 @@ import {
   ArrowLeft,
   GraduationCap,
   MapPin,
+  Compass,
   Calendar,
   Briefcase,
+  Fingerprint,
+  Lightbulb,
   Phone,
   Mail,
-  Award,
-  BookOpen,
 } from 'lucide-react';
 import { serverFetch } from '@/lib/api/serverFetch';
 
@@ -34,7 +35,7 @@ export default async function TeacherDetailsPage({
           Teacher Not Found
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The requested faculty member profile could not be found or has been moved.
+          The requested faculty member profile could not be found.
         </p>
         <Link
           href="/teacher"
@@ -56,16 +57,16 @@ export default async function TeacherDetailsPage({
         <div className="mb-6">
           <Link
             href="/teacher"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary cursor-pointer"
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to All Teachers</span>
           </Link>
         </div>
 
-        {/* 2-Column Main Layout */}
+        {/* 2-Column Main Layout: Left Teacher Card + Right Details */}
         <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
-          {/* Left Column: Teacher Sticky Card */}
+          {/* Left Column: Teacher Card (Sticky on desktop) */}
           <div className="w-full lg:w-80 shrink-0 lg:sticky lg:top-24">
             <div className="overflow-hidden rounded-2xl border border-border/80 bg-card p-6 shadow-xs">
               {/* Photo */}
@@ -77,7 +78,7 @@ export default async function TeacherDetailsPage({
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center text-muted-foreground/60">
+                  <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                     <GraduationCap className="h-16 w-16 text-primary/40" />
                   </div>
                 )}
@@ -101,7 +102,7 @@ export default async function TeacherDetailsPage({
                 Nabiganj Government College
               </p>
 
-              {/* Direct Actions */}
+              {/* Action Buttons */}
               <div className="mt-6 flex flex-col gap-2.5 border-t border-border/70 pt-5">
                 {teacher.phone && (
                   <a
@@ -125,14 +126,14 @@ export default async function TeacherDetailsPage({
             </div>
           </div>
 
-          {/* Right Column: Detailed Structured Info */}
+          {/* Right Column: Detailed Structured Info Sections */}
           <div className="flex-1 space-y-6">
-            {/* Academic Credentials & Department Info */}
+            {/* 2-Column Side-by-Side: Personal Info & Workplace Info */}
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Section 1: Academic & Professional Details */}
+              {/* Section 1: Personal Info */}
               <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs sm:p-7">
                 <h2 className="font-serif text-xl font-bold text-foreground">
-                  Academic Credentials
+                  Personal Info
                 </h2>
 
                 <div className="mt-6 space-y-6">
@@ -143,98 +144,112 @@ export default async function TeacherDetailsPage({
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">
-                        Degree & BCS Cadre
+                        Qualification
                       </span>
                       <p className="mt-0.5 text-sm font-semibold text-foreground leading-relaxed">
-                        {teacher.qualification}
+                        {teacher.qualification || 'Not provided'}
                       </p>
                     </div>
                   </div>
 
-                  {/* Department */}
+                  {/* Present Address */}
                   <div className="flex items-start gap-4">
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                      <BookOpen className="h-5 w-5" />
+                      <Compass className="h-5 w-5" />
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">
-                        Department & Faculty
+                        Present Address
                       </span>
-                      <p className="mt-0.5 text-sm font-semibold text-foreground">
-                        {teacher.department}
+                      <p className="mt-0.5 text-sm font-semibold uppercase leading-relaxed text-foreground">
+                        {teacher.presentAddress || 'Nabiganj, Habiganj, Sylhet'}
                       </p>
                     </div>
                   </div>
 
-                  {/* Institution */}
+                  {/* Permanent Address */}
                   <div className="flex items-start gap-4">
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                       <MapPin className="h-5 w-5" />
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">
-                        Institution
+                        Permanent Address
                       </span>
-                      <p className="mt-0.5 text-sm font-semibold text-foreground">
-                        Nabiganj Govt. College, Habiganj, Sylhet
+                      <p className="mt-0.5 text-sm font-semibold uppercase leading-relaxed text-foreground">
+                        {teacher.permanentAddress || 'Nabiganj, Habiganj, Sylhet'}
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Section 2: Institutional & Experience Info */}
+              {/* Section 2: Workplace Info */}
               <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs sm:p-7">
                 <h2 className="font-serif text-xl font-bold text-foreground">
-                  Faculty Overview
+                  Workplace Info
                 </h2>
 
                 <div className="mt-6 space-y-6">
-                  {/* Designation */}
+                  {/* MPO Index no. */}
+                  <div className="flex items-start gap-4">
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                      <Fingerprint className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        MPO Index no.
+                      </span>
+                      <p className="mt-0.5 text-sm font-semibold text-foreground">
+                        {teacher.mpoIndexNo || 'N/A'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Joining Date */}
+                  <div className="flex items-start gap-4">
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                      <Calendar className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Joining Date
+                      </span>
+                      <p className="mt-0.5 text-sm font-semibold text-foreground">
+                        {teacher.joiningDate || 'Regular BCS Batch'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Experience */}
                   <div className="flex items-start gap-4">
                     <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                       <Briefcase className="h-5 w-5" />
                     </div>
                     <div>
                       <span className="text-xs font-medium text-muted-foreground">
-                        Designation
+                        Experience
                       </span>
                       <p className="mt-0.5 text-sm font-semibold text-foreground">
-                        {teacher.designation}
+                        {teacher.experience || `${teacher.designation} at NGC`}
                       </p>
                     </div>
                   </div>
 
-                  {/* Biography / Research Notes */}
-                  {teacher.bio ? (
-                    <div className="flex items-start gap-4">
-                      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                        <Award className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-muted-foreground">
-                          Biography & Research
-                        </span>
-                        <p className="mt-0.5 text-sm leading-relaxed text-foreground">
-                          {teacher.bio}
-                        </p>
-                      </div>
+                  {/* Interest */}
+                  <div className="flex items-start gap-4">
+                    <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                      <Lightbulb className="h-5 w-5" />
                     </div>
-                  ) : (
-                    <div className="flex items-start gap-4">
-                      <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                        <Calendar className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-muted-foreground">
-                          Status
-                        </span>
-                        <p className="mt-0.5 text-sm font-semibold text-foreground">
-                          Active Government BCS Cadre Faculty
-                        </p>
-                      </div>
+                    <div>
+                      <span className="text-xs font-medium text-muted-foreground">
+                        Interest
+                      </span>
+                      <p className="mt-0.5 text-sm font-semibold text-foreground">
+                        {teacher.interest || 'Academic Teaching & Research'}
+                      </p>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -242,18 +257,18 @@ export default async function TeacherDetailsPage({
             {/* Section 3: Contact Info */}
             <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs sm:p-7">
               <h2 className="font-serif text-xl font-bold text-foreground">
-                Official Contact Information
+                Contact Info
               </h2>
 
               <div className="mt-6 grid gap-6 sm:grid-cols-2">
-                {/* Contact Phone */}
+                {/* Contact No */}
                 <div className="flex items-start gap-4">
                   <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
                     <span className="text-xs font-medium text-muted-foreground">
-                      Phone Number:
+                      Contact No.:
                     </span>
                     <p className="mt-0.5 text-sm font-semibold text-foreground">
                       {teacher.phone ? (
@@ -264,20 +279,20 @@ export default async function TeacherDetailsPage({
                           {teacher.phone}
                         </a>
                       ) : (
-                        <span className="text-muted-foreground/70 italic">Not provided</span>
+                        <span className="text-muted-foreground/60 italic">Not provided</span>
                       )}
                     </p>
                   </div>
                 </div>
 
-                {/* Official Email */}
+                {/* Email */}
                 <div className="flex items-start gap-4">
                   <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
                     <span className="text-xs font-medium text-muted-foreground">
-                      Email Address:
+                      Email :
                     </span>
                     <p className="mt-0.5 text-sm font-semibold text-foreground">
                       {teacher.email ? (
@@ -288,7 +303,7 @@ export default async function TeacherDetailsPage({
                           {teacher.email}
                         </a>
                       ) : (
-                        <span className="text-muted-foreground/70 italic">Not provided</span>
+                        <span className="text-muted-foreground/60 italic">Not provided</span>
                       )}
                     </p>
                   </div>
