@@ -10,13 +10,15 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-  const [statsRes, noticesRes] = await Promise.all([
+  const [statsRes, noticesRes, galleryRes] = await Promise.all([
     serverFetch({ path: "stats" }),
     serverFetch({ path: "notices" }),
+    serverFetch({ path: "gallery?isFeatured=true" }),
   ]);
 
   const stats = statsRes?.data || [];
   const notices = noticesRes?.data || [];
+  const galleryItems = galleryRes?.data || [];
 
   return (
     <main>
@@ -24,7 +26,7 @@ export default async function Home() {
       <NoticeSection notices={notices} />
       <AboutSection />
       <StatsSection initialStats={stats} />
-      <MomentsSection />
+      <MomentsSection initialItems={galleryItems} />
       <ContactSection />
     </main>
   );
