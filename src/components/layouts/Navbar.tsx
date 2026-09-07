@@ -9,6 +9,8 @@ import { Button } from '@heroui/react';
 // import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
@@ -52,15 +54,19 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {navLinks.map(link => {
-            const isActive = pathname === link.href;
+            const isActive =
+              link.href === '/'
+                ? pathname === '/'
+                : pathname.startsWith(link.href);
+
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'relative pb-1 text-sm transition-colors hover:text-primary',
+                  'relative px-3.5 py-1.5 text-sm transition-colors hover:text-primary cursor-pointer',
                   isActive
                     ? 'font-semibold text-primary after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:rounded-full after:bg-primary'
                     : 'font-medium text-muted-foreground',
@@ -72,8 +78,9 @@ export function Navbar() {
           })}
         </nav>
 
-        {/* Desktop CTA Button */}
-        <div className="hidden lg:block">
+        {/* Desktop Controls (ThemeSwitcher + Auth) */}
+        <div className="hidden lg:flex lg:items-center lg:gap-3">
+          <ThemeSwitcher />
           {user ? (
             <div className="flex items-center gap-3">
               <Link
@@ -99,16 +106,19 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <Button
-          type="button"
-          className="inline-flex items-center justify-center rounded-lg p-2 text-foreground lg:hidden cursor-pointer"
-          onClick={() => setOpen(v => !v)}
-          aria-label="Toggle menu"
-          aria-expanded={open}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        {/* Mobile Controls (ThemeSwitcher + Menu Toggle) */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeSwitcher />
+          <Button
+            type="button"
+            className="inline-flex items-center justify-center rounded-lg p-2 text-foreground cursor-pointer"
+            onClick={() => setOpen(v => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={open}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Navigation Dropdown */}

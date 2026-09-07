@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, PT_Serif, Space_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
+import { Providers } from './providers';
 
 const spaceGrotesk = Space_Grotesk({
   variable: '--font-space-grotesk',
@@ -36,10 +37,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${ptSerif.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
         <Toaster
           position="top-center"
           toastOptions={{
