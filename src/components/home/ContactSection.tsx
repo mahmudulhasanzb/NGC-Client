@@ -12,13 +12,13 @@ const ContactSection = () => {
         <div className="grid gap-12 lg:grid-cols-2">
           {/* Left Column: Contact Details */}
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
               Get in Touch
             </span>
-            <h2 className="mt-1 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
               Have Questions? We&apos;re Here to Help
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
               Whether you&apos;re a prospective student, parent, or community
               member, we welcome your inquiries. Reach out to us through any of
               the channels below or send us a message.
@@ -88,7 +88,7 @@ const ContactSection = () => {
                     href="https://maps.google.com/?q=Nabiganj+Govt.+College"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+                    className="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-1 text-[11px] font-semibold text-foreground transition-all hover:border-primary/40 hover:bg-secondary hover:text-primary"
                   >
                     <span>View Larger</span>
                     <ExternalLink className="h-3 w-3" />

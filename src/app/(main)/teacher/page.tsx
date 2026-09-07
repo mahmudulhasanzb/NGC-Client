@@ -14,11 +14,14 @@ const AllTeachersPage = async () => {
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="mb-8 border-b border-border/70 pb-6">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
+            Faculty & Mentors
+          </div>
           <h1 className="font-serif text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
-            Teachers
+            Teachers & Faculty Directory
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-            Meet the faculty members and educators of Nabiganj Government College
+          <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
+            Meet the distinguished educators, scholars, and academic leaders of Nabiganj Government College
           </p>
         </div>
 

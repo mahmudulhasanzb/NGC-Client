@@ -61,12 +61,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-secondary/30 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen flex-col justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       {/* Return to Home Link */}
       <div className="mx-auto mb-6 w-full max-w-md">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground transition-colors hover:text-primary sm:text-sm"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-muted-foreground transition-colors hover:text-primary sm:text-sm cursor-pointer"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Home</span>
@@ -74,7 +74,7 @@ const LoginPage = () => {
       </div>
 
       {/* Main Login Card */}
-      <div className="mx-auto w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-md sm:p-10">
+      <div className="mx-auto w-full max-w-md rounded-2xl border border-border/80 bg-card p-6 shadow-xl shadow-primary/5 sm:p-10">
         {/* College Brand Logo & Title */}
         <div className="flex flex-col items-center text-center">
           <div className="flex h-14 w-14 items-center justify-center">
@@ -116,7 +116,7 @@ const LoginPage = () => {
                     message: 'Please enter a valid email address',
                   },
                 })}
-                className={`h-11 w-full rounded-xl border bg-background pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all ${
+                className={`h-11 w-full rounded-xl border bg-[#f8fcff] pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground shadow-2xs focus:outline-none focus:ring-2 transition-all ${
                   errors.email
                     ? 'border-destructive focus:ring-destructive/20'
                     : 'border-border focus:border-primary focus:ring-primary/20'
@@ -139,12 +139,7 @@ const LoginPage = () => {
               >
                 Password
               </label>
-              <Link
-                href="/forgot-password"
-                className="text-xs font-medium text-primary hover:underline"
-              >
-                Forgot password?
-              </Link>
+             
             </div>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -160,7 +155,7 @@ const LoginPage = () => {
                     message: 'Password must be at least 6 characters',
                   },
                 })}
-                className={`h-11 w-full rounded-xl border bg-background pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 transition-all ${
+                className={`h-11 w-full rounded-xl border bg-[#f8fcff] pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground shadow-2xs focus:outline-none focus:ring-2 transition-all ${
                   errors.password
                     ? 'border-destructive focus:ring-destructive/20'
                     : 'border-border focus:border-primary focus:ring-primary/20'
@@ -203,7 +198,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-60 cursor-pointer active:scale-[0.99]"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-60 cursor-pointer active:scale-[0.99]"
             >
               {loading ? (
                 <>

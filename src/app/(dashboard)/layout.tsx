@@ -3,7 +3,7 @@ import DashboardSideBar from '@/components/layouts/DashboardSideBar';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-background">
       {/* Sidebar */}
       <DashboardSideBar />
 

@@ -117,7 +117,7 @@ export default async function TeacherDetailsPage({
                 {teacher.email && (
                   <a
                     href={`mailto:${teacher.email}`}
-                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-background px-4 text-xs font-semibold text-foreground transition-colors hover:bg-secondary hover:text-primary cursor-pointer"
+                    className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 text-xs font-semibold text-foreground transition-all hover:border-primary/40 hover:bg-secondary hover:text-primary cursor-pointer"
                   >
                     <Mail className="h-4 w-4" />
                     <span>Send Email</span>

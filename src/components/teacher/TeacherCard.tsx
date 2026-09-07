@@ -21,10 +21,10 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
   return (
     <Link
       href={`/teacher/${teacher.id}`}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card p-3.5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md cursor-pointer"
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card p-3.5 shadow-2xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-md cursor-pointer"
     >
       {/* Teacher Photo */}
-      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-secondary">
+      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-lg bg-secondary/70">
         {imageSrc ? (
           <img
             src={imageSrc}
@@ -32,7 +32,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-muted-foreground/60">
+          <div className="flex h-full w-full items-center justify-center text-primary/40">
             <GraduationCap className="h-10 w-10" />
           </div>
         )}
@@ -46,7 +46,7 @@ const TeacherCard: React.FC<TeacherCardProps> = ({ teacher }) => {
       </div>
 
       {/* Name */}
-      <h3 className="font-serif text-sm font-bold leading-snug text-foreground sm:text-base">
+      <h3 className="font-serif text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-base">
         {teacher.name}
       </h3>
 

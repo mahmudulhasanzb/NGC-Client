@@ -33,16 +33,16 @@ export const NoticeCard: React.FC<NoticeCardProps> = ({ noticeData, notice }) =>
   return (
     <Link
       href={`/notice/${targetSlugOrId}`}
-      className="group flex flex-col justify-between rounded-xl border border-border bg-card p-3.5 transition-all hover:border-primary/40 hover:bg-secondary/15 hover:shadow-sm sm:p-4 cursor-pointer"
+      className="group flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 transition-all duration-200 hover:border-primary/50 hover:bg-secondary/20 hover:shadow-md sm:p-5 cursor-pointer"
     >
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {/* Top: Category Badge & Pin */}
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-[10px] font-semibold text-primary sm:text-xs">
+          <span className="inline-flex items-center rounded-md bg-secondary px-2.5 py-0.5 text-[11px] font-semibold text-primary sm:text-xs">
             {item.category}
           </span>
           {isPinned && (
-            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-accent">
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-accent">
               <Pin className="h-3 w-3 fill-accent" />
               <span>Featured</span>
             </span>
@@ -50,20 +50,20 @@ export const NoticeCard: React.FC<NoticeCardProps> = ({ noticeData, notice }) =>
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-base">
+        <h3 className="font-serif text-base font-semibold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-lg">
           {item.title}
         </h3>
       </div>
 
       {/* Bottom: Date & Read Indicator */}
-      <div className="mt-3 flex items-center justify-between border-t border-border/50 pt-2.5 text-[11px] text-muted-foreground sm:text-xs">
+      <div className="mt-4 flex items-center justify-between border-t border-border/70 pt-3 text-xs text-muted-foreground">
         <div className="flex items-center gap-1.5">
-          <Calendar className="h-3 w-3 text-primary" />
+          <Calendar className="h-3.5 w-3.5 text-primary" />
           <span>{dateValue ? formatDate(dateValue) : 'Official Circular'}</span>
         </div>
         <span className="inline-flex items-center gap-1 font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
-          <span>View</span>
-          <ArrowRight className="h-3 w-3" />
+          <span>View Notice</span>
+          <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>
     </Link>

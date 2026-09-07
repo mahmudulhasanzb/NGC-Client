@@ -34,7 +34,7 @@ const slides: Slide[] = [
   {
     id: 2,
     image:
-      'https://images.pexels.com/photos/256455/pexels-photo-256455.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      'https://images.pexels.com/photos/256455/jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
     badge: 'Modern Infrastructure & Digital Library',
     title: 'World-Class Learning Environment',
     subtitle:
@@ -42,20 +42,20 @@ const slides: Slide[] = [
     primaryCtaText: 'Explore Programs',
     primaryCtaLink: '/about',
     secondaryCtaText: 'View Notices',
-    secondaryCtaLink: '/noticeboard',
+    secondaryCtaLink: '/notice',
   },
   {
     id: 3,
     image:
-      'https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      'https://images.pexels.com/photos/267885/jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
     badge: 'Excellence In Higher Education',
     title: 'Celebrating Student Success',
     subtitle:
       'Consistently producing outstanding HSC and degree results through dedicated faculty mentorship and holistic student development programs.',
     primaryCtaText: 'Meet Our Faculty',
-    primaryCtaLink: '/teachers',
+    primaryCtaLink: '/teacher',
     secondaryCtaText: 'Campus Moments',
-    secondaryCtaLink: '/moments',
+    secondaryCtaLink: '/gallery',
   },
 ];
 
@@ -173,7 +173,7 @@ const Header = () => {
         <div className="relative mx-auto w-full max-w-8xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 pointer-events-none">
           <div className="max-w-3xl pointer-events-auto">
             {/* Pill Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-md ring-1 ring-white/20 sm:text-sm">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-md shadow-xs sm:text-sm">
               <Award className="h-4 w-4 text-accent" />
               <span>{slides[currentSlide].badge}</span>
             </div>
@@ -181,7 +181,7 @@ const Header = () => {
             {/* Main Title */}
             <h1
               key={`title-${currentSlide}`}
-              className="font-serif text-3xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl text-balance animate-fade-in"
+              className="font-serif text-3xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl text-balance"
             >
               {slides[currentSlide].title}
             </h1>
@@ -189,7 +189,7 @@ const Header = () => {
             {/* Subtitle */}
             <p
               key={`sub-${currentSlide}`}
-              className="mt-5 text-base leading-relaxed text-white/85 sm:text-lg lg:text-xl animate-fade-in"
+              className="mt-5 text-base leading-relaxed text-white/90 sm:text-lg lg:text-xl"
             >
               {slides[currentSlide].subtitle}
             </p>
@@ -198,7 +198,7 @@ const Header = () => {
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Link
                 href={slides[currentSlide].primaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] cursor-pointer"
+                className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 hover:shadow-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] cursor-pointer"
               >
                 {slides[currentSlide].primaryCtaText}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -206,7 +206,7 @@ const Header = () => {
 
               <Link
                 href={slides[currentSlide].secondaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-md border border-white/30 bg-white/10 px-6 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-[0.98] cursor-pointer"
+                className="inline-flex h-11 items-center justify-center rounded-lg border border-white/40 bg-white/15 px-6 text-sm font-semibold text-white backdrop-blur-md transition-all hover:border-white/60 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-[0.98] cursor-pointer"
               >
                 <BookOpen className="mr-2 h-4 w-4" />
                 {slides[currentSlide].secondaryCtaText}
@@ -228,7 +228,7 @@ const Header = () => {
               aria-label={`Go to slide ${idx + 1}`}
               className={`h-2 rounded-full transition-all duration-300 cursor-pointer p-0 border-0 ${
                 idx === currentSlide
-                  ? 'w-8 bg-accent'
+                  ? 'w-8 bg-primary shadow-xs'
                   : 'w-2 bg-white/50 hover:bg-white/80'
               }`}
             />

@@ -154,40 +154,40 @@ const AdmissionPage = () => {
       </section>
 
       {/* 2. Key Institutional Identifiers Banner */}
-      <section className="border-b border-border/60 bg-card py-5">
+      <section className="border-b border-border/60 bg-secondary/15 py-6">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-4 text-center sm:grid-cols-4">
-            <div className="rounded-xl border border-border/60 bg-secondary/20 p-3">
-              <span className="text-xs text-muted-foreground">EIIN Code</span>
-              <p className="font-serif text-lg font-bold text-foreground sm:text-xl">129524</p>
+            <div className="rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-primary/40">
+              <span className="text-xs font-semibold text-muted-foreground">EIIN Code</span>
+              <p className="font-mono text-xl font-bold text-primary mt-1 sm:text-2xl">129524</p>
             </div>
-            <div className="rounded-xl border border-border/60 bg-secondary/20 p-3">
-              <span className="text-xs text-muted-foreground">College Code (HSC)</span>
-              <p className="font-serif text-lg font-bold text-foreground sm:text-xl">1301</p>
+            <div className="rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-primary/40">
+              <span className="text-xs font-semibold text-muted-foreground">College Code (HSC)</span>
+              <p className="font-mono text-xl font-bold text-primary mt-1 sm:text-2xl">1301</p>
             </div>
-            <div className="rounded-xl border border-border/60 bg-secondary/20 p-3">
-              <span className="text-xs text-muted-foreground">National Univ. Code</span>
-              <p className="font-serif text-lg font-bold text-foreground sm:text-xl">1706</p>
+            <div className="rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-primary/40">
+              <span className="text-xs font-semibold text-muted-foreground">National Univ. Code</span>
+              <p className="font-mono text-xl font-bold text-primary mt-1 sm:text-2xl">1706</p>
             </div>
-            <div className="rounded-xl border border-border/60 bg-secondary/20 p-3">
-              <span className="text-xs text-muted-foreground">Education Board</span>
-              <p className="font-serif text-lg font-bold text-foreground sm:text-xl">Sylhet Board</p>
+            <div className="rounded-2xl border border-border/80 bg-card p-4 shadow-2xs transition-all hover:border-primary/40">
+              <span className="text-xs font-semibold text-muted-foreground">Education Board</span>
+              <p className="font-serif text-lg font-bold text-foreground mt-1 sm:text-xl">Sylhet Board</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. HSC Programs & Eligibility */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+          <div className="mb-12 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
               Higher Secondary Certificate (HSC)
-            </span>
-            <h2 className="mt-1 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               HSC Programs & Requirements
             </h2>
-            <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
               Minimum GPA and subject prerequisites for class XI admission
             </p>
           </div>
@@ -196,7 +196,7 @@ const AdmissionPage = () => {
             {hscPrograms.map((prog) => (
               <div
                 key={prog.group}
-                className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-primary/40 hover:shadow-md"
+                className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -204,7 +204,7 @@ const AdmissionPage = () => {
                       {prog.group}
                     </span>
                     <span className="text-[11px] font-medium text-muted-foreground">
-                      Seats: <strong className="text-foreground">{prog.seats}</strong>
+                      Seats: <strong className="font-mono text-foreground">{prog.seats}</strong>
                     </span>
                   </div>
 
@@ -212,9 +212,9 @@ const AdmissionPage = () => {
                     {prog.group} Group
                   </h3>
 
-                  <div className="mt-4 rounded-xl bg-secondary/40 p-3.5">
-                    <div className="text-xs text-muted-foreground">Minimum SSC Requirement</div>
-                    <div className="mt-0.5 text-base font-bold text-primary">
+                  <div className="mt-4 rounded-xl border border-border/60 bg-secondary/30 p-3.5">
+                    <div className="text-xs font-medium text-muted-foreground">Minimum SSC Requirement</div>
+                    <div className="mt-0.5 font-mono text-base font-bold text-primary">
                       GPA {prog.minGpa} & Above
                     </div>
                   </div>
@@ -222,16 +222,16 @@ const AdmissionPage = () => {
                   <div className="mt-4 space-y-3 text-xs sm:text-sm">
                     <div>
                       <span className="font-semibold text-foreground">Eligibility:</span>
-                      <p className="mt-0.5 text-muted-foreground">{prog.eligibility}</p>
+                      <p className="mt-0.5 text-muted-foreground leading-relaxed">{prog.eligibility}</p>
                     </div>
                     <div>
                       <span className="font-semibold text-foreground">Major Subjects:</span>
-                      <p className="mt-0.5 text-muted-foreground">{prog.subjects}</p>
+                      <p className="mt-0.5 text-muted-foreground leading-relaxed">{prog.subjects}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-6 border-t border-border/60 pt-4 text-xs text-muted-foreground">
+                <div className="mt-6 border-t border-border/60 pt-4 text-xs font-medium text-muted-foreground">
                   Duration: {prog.duration} • Sylhet Board
                 </div>
               </div>
@@ -241,16 +241,16 @@ const AdmissionPage = () => {
       </section>
 
       {/* 4. Degree (Pass) Programs */}
-      <section className="border-y border-border/60 bg-secondary/30 py-12 sm:py-16">
+      <section className="border-y border-border/60 bg-secondary/30 py-12 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+          <div className="mb-12 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
               Undergraduate Level
-            </span>
-            <h2 className="mt-1 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               Degree (Pass) Programs (National University)
             </h2>
-            <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
               Affiliated 3-year undergraduate degree courses
             </p>
           </div>
@@ -259,7 +259,7 @@ const AdmissionPage = () => {
             {degreePrograms.map((deg) => (
               <div
                 key={deg.degree}
-                className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all hover:border-primary/40"
+                className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
                 <div className="flex items-center justify-between">
                   <span className="rounded-md bg-primary/10 px-2.5 py-0.5 text-xs font-bold text-primary">
@@ -281,7 +281,7 @@ const AdmissionPage = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Total Capacity:</span>
-                    <span className="font-semibold text-foreground">{deg.seats} Students</span>
+                    <span className="font-mono font-semibold text-foreground">{deg.seats} Students</span>
                   </div>
                 </div>
               </div>
@@ -291,45 +291,47 @@ const AdmissionPage = () => {
       </section>
 
       {/* 5. Step-by-Step Admission Process */}
-      <section className="py-12 sm:py-16">
+      <section className="py-12 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+          <div className="mb-12 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
               Workflow
-            </span>
-            <h2 className="mt-1 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               How to Apply (Step-by-Step)
             </h2>
-            <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
               Follow these simple steps to complete your online application and enrollment
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
             {steps.map((s) => (
               <div
                 key={s.step}
-                className="relative rounded-2xl border border-border/80 bg-card p-5 shadow-xs transition-all hover:border-primary/40 hover:shadow-sm"
+                className="group relative flex flex-col justify-between rounded-2xl border border-border/80 bg-card p-5 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md"
               >
-                <div className="font-serif text-3xl font-black text-primary/30">
-                  {s.step}
+                <div>
+                  <div className="font-mono text-3xl font-black text-primary/30 transition-colors group-hover:text-primary">
+                    {s.step}
+                  </div>
+                  <h3 className="mt-2 font-serif text-base font-bold text-foreground">
+                    {s.title}
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {s.description}
+                  </p>
                 </div>
-                <h3 className="mt-2 font-serif text-base font-bold text-foreground">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {s.description}
-                </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
             <a
               href="http://xiclassadmission.gov.bd"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 active:scale-[0.98]"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 active:scale-[0.98] cursor-pointer"
             >
               <span>XI Class Online Admission Portal</span>
               <ExternalLink className="h-4 w-4" />
@@ -338,7 +340,7 @@ const AdmissionPage = () => {
               href="http://app1.nu.edu.bd"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-background px-6 text-sm font-semibold text-foreground transition-all hover:bg-secondary hover:text-primary"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-card px-7 text-sm font-semibold text-foreground shadow-2xs transition-all hover:border-primary/40 hover:bg-secondary hover:text-primary active:scale-[0.98] cursor-pointer"
             >
               <span>NU Degree Admission Portal</span>
               <ExternalLink className="h-4 w-4" />
@@ -348,13 +350,13 @@ const AdmissionPage = () => {
       </section>
 
       {/* 6. Required Documents & Admission Schedule */}
-      <section className="border-t border-border/60 bg-secondary/20 py-12 sm:py-16">
+      <section className="border-t border-border/60 bg-secondary/20 py-12 sm:py-20">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Left: Required Documents Checklist */}
             <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs sm:p-8">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
                   <FileText className="h-5 w-5" />
                 </div>
                 <div>
@@ -381,7 +383,7 @@ const AdmissionPage = () => {
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <span>Important Note:</span>
                 </div>
-                <p className="mt-1">
+                <p className="mt-1 leading-relaxed">
                   Original SSC marksheet and testimonial must be shown at the time of verification.
                   Laminated documents are accepted.
                 </p>
@@ -391,7 +393,7 @@ const AdmissionPage = () => {
             {/* Right: Admission Dates Schedule */}
             <div className="rounded-2xl border border-border/80 bg-card p-6 shadow-xs sm:p-8">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary">
                   <Calendar className="h-5 w-5" />
                 </div>
                 <div>
@@ -408,10 +410,10 @@ const AdmissionPage = () => {
                 {admissionSchedule.map((item, idx) => (
                   <div key={idx} className="flex items-center justify-between py-3.5 text-xs sm:text-sm">
                     <div>
-                      <p className="font-medium text-foreground">{item.event}</p>
-                      <p className="mt-0.5 text-xs text-primary font-semibold">{item.date}</p>
+                      <p className="font-semibold text-foreground">{item.event}</p>
+                      <p className="mt-0.5 font-mono text-xs text-primary font-bold">{item.date}</p>
                     </div>
-                    <span className="rounded-full bg-secondary px-2.5 py-0.5 text-[10px] font-bold uppercase text-muted-foreground">
+                    <span className="rounded-full bg-secondary px-2.5 py-0.5 text-[10px] font-bold uppercase text-primary">
                       {item.status}
                     </span>
                   </div>
@@ -419,7 +421,7 @@ const AdmissionPage = () => {
               </div>
 
               {/* Admission Helpline Desk */}
-              <div className="mt-6 rounded-xl border border-border/80 bg-secondary/40 p-4">
+              <div className="mt-6 rounded-xl border border-border/80 bg-secondary/35 p-4">
                 <h4 className="font-serif text-sm font-bold text-foreground">
                   Admission Helpline & Helpdesk
                 </h4>
@@ -427,11 +429,11 @@ const AdmissionPage = () => {
                   Need assistance with your application? Contact our admission cell during office hours (9:00 AM – 4:00 PM).
                 </p>
                 <div className="mt-3 flex flex-wrap gap-4 text-xs font-semibold text-primary">
-                  <a href="tel:01777262980" className="flex items-center gap-1.5 hover:underline">
+                  <a href="tel:01777262980" className="flex items-center gap-1.5 hover:underline cursor-pointer">
                     <Phone className="h-3.5 w-3.5" />
                     <span>01777262980</span>
                   </a>
-                  <a href="mailto:admission@ngc.edu.bd" className="flex items-center gap-1.5 hover:underline">
+                  <a href="mailto:admission@ngc.edu.bd" className="flex items-center gap-1.5 hover:underline cursor-pointer">
                     <Mail className="h-3.5 w-3.5" />
                     <span>admission@ngc.edu.bd</span>
                   </a>

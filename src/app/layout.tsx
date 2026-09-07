@@ -1,16 +1,24 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Space_Grotesk, PT_Serif, Space_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 
-const inter = Inter({
-  variable: '--font-inter',
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
-  variable: '--font-playfair',
+const ptSerif = PT_Serif({
+  variable: '--font-pt-serif',
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const spaceMono = Space_Mono({
+  variable: '--font-space-mono',
+  weight: ['400', '700'],
   subsets: ['latin'],
   display: 'swap',
 });
@@ -28,9 +36,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${ptSerif.variable} ${spaceMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         {children}
         <Toaster
           position="top-center"

@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Loader2, Award, Users, GraduationCap, Building2, BookOpen, Trophy, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Button } from '@heroui/react';
 import { serverMutation } from '@/lib/api/serverMutation';
 
 export interface CollegeStat {
@@ -158,13 +157,13 @@ export const StatFormModal: React.FC<StatFormModalProps> = ({
                 : 'Add a prominent metric counter for Nabiganj Government College'}
             </p>
           </div>
-          <Button
+          <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer transition-colors"
             onClick={onClose}
           >
             <X className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
 
         {/* Form Body */}

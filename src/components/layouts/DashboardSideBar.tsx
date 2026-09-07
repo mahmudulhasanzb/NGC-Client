@@ -263,16 +263,34 @@ const DashboardSideBar = () => {
 
   return (
     <>
-      {/* Mobile Hamburger Button */}
-      <div className="lg:hidden fixed top-3 left-3 z-40">
+      {/* Mobile Sticky Top Header */}
+      <div className="lg:hidden sticky top-0 z-40 flex h-14 items-center justify-between border-b border-border/70 bg-card/95 backdrop-blur-md px-4 shrink-0 shadow-xs">
         <button
           type="button"
           onClick={() => setIsMobileOpen(true)}
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-card shadow-sm text-foreground hover:bg-secondary"
+          className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-background shadow-2xs text-foreground hover:bg-secondary cursor-pointer"
           aria-label="Open sidebar"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-4 w-4" />
         </button>
+
+        <div className="flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-primary text-primary-foreground font-serif font-bold text-xs">
+            NGC
+          </span>
+          <span className="font-serif text-xs font-bold text-foreground">
+            Admin Portal
+          </span>
+        </div>
+
+        <Link
+          href="/"
+          target="_blank"
+          className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground hover:text-primary transition-colors cursor-pointer"
+        >
+          <Globe className="h-3 w-3" />
+          <span>Site</span>
+        </Link>
       </div>
 
       {/* Mobile Backdrop */}

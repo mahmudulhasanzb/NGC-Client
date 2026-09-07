@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { X, Loader2, ShieldCheck, UserCheck, Lock } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Button } from '@heroui/react';
 import { serverMutation } from '@/lib/api/serverMutation';
 
 export interface AdminUser {
@@ -159,13 +158,13 @@ export const AdminFormModal: React.FC<AdminFormModalProps> = ({
                 : 'Grant internal dashboard access credentials to college staff'}
             </p>
           </div>
-          <Button
+          <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground cursor-pointer transition-colors"
             onClick={onClose}
           >
             <X className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
 
         {/* Form Body with React Hook Form */}

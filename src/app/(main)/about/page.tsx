@@ -97,31 +97,31 @@ export default async function AboutPage() {
 
               {/* Badges / Codes */}
               <div className="grid grid-cols-2 gap-3 pt-2 sm:grid-cols-4">
-                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs">
+                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs transition-all hover:border-primary/40">
                   <div className="text-[10px] uppercase font-bold text-muted-foreground">
                     EIIN Number
                   </div>
-                  <div className="font-serif text-sm font-bold text-foreground mt-0.5">
+                  <div className="font-mono text-sm font-bold text-primary mt-0.5">
                     {eiinNumber}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs">
+                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs transition-all hover:border-primary/40">
                   <div className="text-[10px] uppercase font-bold text-muted-foreground">
                     College Code
                   </div>
-                  <div className="font-serif text-sm font-bold text-foreground mt-0.5">
+                  <div className="font-mono text-sm font-bold text-primary mt-0.5">
                     {collegeCode}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs">
+                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs transition-all hover:border-primary/40">
                   <div className="text-[10px] uppercase font-bold text-muted-foreground">
                     National Univ.
                   </div>
-                  <div className="font-serif text-sm font-bold text-foreground mt-0.5">
+                  <div className="font-mono text-sm font-bold text-primary mt-0.5">
                     {nuCode}
                   </div>
                 </div>
-                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs">
+                <div className="rounded-xl border border-border/80 bg-card p-3 text-center shadow-2xs transition-all hover:border-primary/40">
                   <div className="text-[10px] uppercase font-bold text-muted-foreground">
                     Affiliation
                   </div>
@@ -163,13 +163,13 @@ export default async function AboutPage() {
       </section>
 
       {/* Mission, Vision & Values Section */}
-      <section className="bg-secondary/30 py-16 sm:py-20 border-b border-border/60">
+      <section className="bg-secondary/30 py-16 sm:py-24 border-b border-border/60">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center max-w-2xl mx-auto">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
               Our Principles
-            </span>
-            <h2 className="mt-1 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               Mission, Vision & Values
             </h2>
             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
@@ -203,9 +203,9 @@ export default async function AboutPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-border bg-card p-8 text-center transition-all hover:border-primary/40 hover:shadow-md"
+                className="rounded-2xl border border-border/80 bg-card p-8 text-center shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-secondary text-primary shadow-xs">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-secondary text-primary shadow-xs">
                   <item.icon className="h-7 w-7" />
                 </div>
                 <h3 className="font-serif text-xl font-bold text-foreground">
@@ -221,13 +221,13 @@ export default async function AboutPage() {
       </section>
 
       {/* Why Choose NGC Highlights */}
-      <section className="py-16 sm:py-20">
+      <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center max-w-2xl mx-auto">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary sm:text-sm">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
               Institutional Excellence
-            </span>
-            <h2 className="mt-1 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+            </div>
+            <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl">
               Why Choose NGC?
             </h2>
             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
@@ -239,12 +239,12 @@ export default async function AboutPage() {
             {highlights.map((item) => (
               <div
                 key={item.title}
-                className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/40 hover:shadow-md"
+                className="group rounded-2xl border border-border/80 bg-card p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform group-hover:scale-110">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-secondary text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
                   <item.icon className="h-6 w-6" />
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-foreground">
+                <h3 className="font-serif text-lg font-bold text-foreground">
                   {item.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -257,10 +257,10 @@ export default async function AboutPage() {
       </section>
 
       {/* Principal's Message Section */}
-      <section className="bg-primary py-16 sm:py-20 text-primary-foreground">
+      <section className="bg-primary py-16 sm:py-24 text-primary-foreground shadow-inner">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <Award className="mx-auto mb-4 h-12 w-12 text-accent" />
-          <h2 className="font-serif text-3xl font-bold sm:text-4xl">
+          <Award className="mx-auto mb-4 h-12 w-12 text-accent drop-shadow-sm" />
+          <h2 className="font-serif text-3xl font-bold sm:text-4xl text-white">
             Principal&apos;s Message
           </h2>
           <p className="mt-6 text-base italic leading-relaxed text-primary-foreground/90 sm:text-xl">
@@ -270,7 +270,7 @@ export default async function AboutPage() {
             wholeheartedly dedicated to nurturing curiosity, ethical discipline,
             and academic distinction across all fields of study.&rdquo;
           </p>
-          <div className="mt-6 font-serif text-lg font-semibold text-white">
+          <div className="mt-8 font-serif text-lg font-bold text-white tracking-wide">
             — The Principal, Nabiganj Govt. College
           </div>
         </div>

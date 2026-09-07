@@ -102,7 +102,7 @@ export const ContactForm = () => {
       <button
         type="submit"
         disabled={loading}
-        className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 sm:w-auto cursor-pointer"
+        className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60 sm:w-auto cursor-pointer"
       >
         {loading ? (
           <>

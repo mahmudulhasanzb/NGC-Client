@@ -137,7 +137,7 @@ export default async function NoticeDetailPage({
           {/* Footer Note */}
           <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-border/60 pt-4 text-xs text-muted-foreground sm:flex-row">
             <span>Nabiganj Government College • Official Electronic Notice Board</span>
-            <span className="font-semibold text-primary">EIIN: 129524 | Code: 1301</span>
+            <span className="font-mono text-xs font-semibold text-primary">EIIN: 129524 | Code: 1301</span>
           </div>
         </article>
       </div>

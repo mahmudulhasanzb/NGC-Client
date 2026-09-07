@@ -173,16 +173,16 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
                 return (
                   <div
                     key={pillar.title}
-                    className="flex flex-col items-center rounded-xl border border-border/80 bg-secondary/30 p-2.5 text-center transition-colors hover:border-primary/40 hover:bg-secondary/50"
+                    className="flex flex-col items-center rounded-xl border border-border/80 bg-card p-2.5 text-center shadow-2xs transition-all hover:border-primary/40 hover:bg-secondary/30"
                   >
-                    <div className="mb-1 flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <div className="mb-1 flex h-7 w-7 items-center justify-center rounded-lg bg-secondary text-primary">
                       <Icon className="h-3.5 w-3.5" />
                     </div>
                     <div className="font-serif text-[11px] font-bold text-foreground">
                       {pillar.title}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
-                      {pillar.title}
+                      {pillar.subtitle}
                     </div>
                   </div>
                 );
@@ -193,7 +193,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
             <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <Link
                 href="/about"
-                className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-4 text-xs font-medium text-foreground transition-colors hover:bg-secondary hover:text-primary focus-visible:outline-none cursor-pointer"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-4 text-xs font-semibold text-foreground shadow-2xs transition-all hover:border-primary/40 hover:bg-secondary hover:text-primary focus-visible:outline-none cursor-pointer"
               >
                 Read Full Story
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -202,9 +202,9 @@ const AboutSection: React.FC<AboutSectionProps> = ({ aboutData }) => {
               <button
                 type="button"
                 onClick={() => setIsVideoOpen(true)}
-                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-secondary px-4 text-xs font-semibold text-primary transition-colors hover:bg-secondary/80 cursor-pointer"
+                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground shadow-xs transition-all hover:bg-primary/90 active:scale-[0.98] cursor-pointer"
               >
-                <Play className="h-3.5 w-3.5 fill-primary" />
+                <Play className="h-3.5 w-3.5 fill-primary-foreground" />
                 <span>Play Tour</span>
               </button>
             </div>

@@ -41,13 +41,13 @@ export const PublicNoticeList: React.FC<PublicNoticeListProps> = ({
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="mb-8 border-b border-border/70 pb-6">
-          <div className="text-xs font-semibold uppercase tracking-wider text-primary mb-1">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-2">
             Official Circulars & Bulletins
           </div>
           <h1 className="font-serif text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             College Notice Board
           </h1>
-          <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
+          <p className="mt-1.5 text-xs text-muted-foreground sm:text-sm">
             Stay updated with academic schedules, examination routines, and official guidelines from Nabiganj Government College
           </p>
         </div>
@@ -62,7 +62,7 @@ export const PublicNoticeList: React.FC<PublicNoticeListProps> = ({
               placeholder="Search circulars by title or keyword..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 w-full rounded-xl border border-border bg-background pl-10 pr-4 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+              className="h-10 w-full rounded-xl border border-border bg-card pl-10 pr-4 text-xs text-foreground placeholder:text-muted-foreground shadow-2xs focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
 

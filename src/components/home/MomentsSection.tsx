@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ZoomIn, X, Calendar } from 'lucide-react';
 import { Button } from '@heroui/react';
@@ -23,6 +23,25 @@ interface MomentsSectionProps {
 const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) => {
   const [selectedImage, setSelectedImage] = useState<MomentItem | null>(null);
 
+  // Close lightbox on ESC key & lock scroll
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedImage(null);
+      }
+    };
+    if (selectedImage) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedImage]);
+
   if (!initialItems || initialItems.length === 0) {
     return null;
   }
@@ -43,7 +62,7 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
     return (
       <div
         onClick={() => setSelectedImage(item)}
-        className={`group relative overflow-hidden rounded-2xl border border-border/80 bg-card cursor-pointer shadow-xs ${aspectRatio}`}
+        className={`group relative overflow-hidden rounded-2xl border border-border/80 bg-card cursor-pointer shadow-xs transition-all duration-300 hover:border-primary/50 hover:shadow-xl ${aspectRatio}`}
       >
         <img
           src={imgSrc}
@@ -55,10 +74,10 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
         />
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Top right zoom icon */}
-        <div className="absolute right-3 top-3 rounded-full bg-black/40 p-2 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
+        <div className="absolute right-3 top-3 rounded-full bg-black/50 p-2 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
           <ZoomIn className="h-4 w-4" />
         </div>
 
@@ -69,7 +88,7 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
           </h4>
           {item.createdAt && (
             <div className="mt-1 flex items-center gap-1 text-[11px] text-white/80">
-              <Calendar className="h-3 w-3" />
+              <Calendar className="h-3 w-3 text-accent" />
               <span>{formatDate(item.createdAt)}</span>
             </div>
           )}
@@ -130,7 +149,7 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
         <div className="mt-12 text-center">
           <Link
             href="/gallery"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98] cursor-pointer"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary active:scale-[0.98] cursor-pointer"
           >
             View All Media
           </Link>
@@ -140,7 +159,7 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
       {/* Lightbox Modal on Image Click */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 backdrop-blur-md animate-fade-in"
           onClick={() => setSelectedImage(null)}
         >
           <Button
@@ -153,7 +172,7 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
           </Button>
 
           <div
-            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl bg-card shadow-2xl"
+            className="relative max-h-[90vh] max-w-4xl overflow-hidden rounded-2xl border border-white/15 bg-card shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <img
@@ -161,10 +180,16 @@ const MomentsSection: React.FC<MomentsSectionProps> = ({ initialItems = [] }) =>
               alt={selectedImage.title}
               className="max-h-[75vh] w-full object-contain bg-black"
             />
-            <div className="p-5">
+            <div className="border-t border-border/60 bg-card p-5">
               <h3 className="font-serif text-xl font-bold text-foreground">
                 {selectedImage.title}
               </h3>
+              {selectedImage.createdAt && (
+                <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Calendar className="h-3.5 w-3.5 text-primary" />
+                  <span>{formatDate(selectedImage.createdAt)}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

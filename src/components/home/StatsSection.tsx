@@ -100,7 +100,7 @@ function StatCounter({
 
   if (!isNumeric) {
     return (
-      <div className="font-serif text-2xl font-bold tracking-tight text-primary sm:text-3xl">
+      <div className="font-serif text-3xl font-bold tracking-tight text-primary sm:text-4xl">
         {fallbackDisplay}
       </div>
     );
@@ -109,7 +109,7 @@ function StatCounter({
   return (
     <div
       ref={counterRef}
-      className="font-serif text-2xl font-bold tracking-tight text-primary sm:text-3xl"
+      className="font-serif text-3xl font-bold tracking-tight text-primary sm:text-4xl"
     >
       {prefix}
       {count.toLocaleString()}
@@ -129,21 +129,24 @@ const StatsSection: React.FC<StatsSectionProps> = ({ initialStats }) => {
   if (statsToDisplay.length === 0) return null;
 
   return (
-    <section className="border-y border-border/70 bg-secondary/20 py-10 sm:py-12">
+    <section className="border-y border-border/70 bg-secondary/30 py-12 sm:py-16">
       <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
-        {/* Compact Section Header */}
-        <div className="mx-auto mb-8 max-w-2xl text-center">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-primary sm:text-xs">
-            Milestones & Impact
+        {/* Section Header */}
+        <div className="mx-auto mb-10 max-w-2xl text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Milestones & Impact</span>
           </span>
-          <h2 className="mt-0.5 font-serif text-2xl font-bold text-foreground sm:text-3xl">
+          <h2 className="mt-2 font-serif text-3xl font-bold text-foreground sm:text-4xl">
             Our Journey in Numbers
           </h2>
-          <div className="mx-auto mt-2 h-0.5 w-10 rounded-full bg-primary/60" />
+          <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+            Decades of academic leadership, outstanding results, and institutional growth
+          </p>
         </div>
 
-        {/* Compact 4-Column Stat Cards */}
-        <div className="grid grid-cols-2 gap-3.5 sm:gap-4 lg:grid-cols-4">
+        {/* 4-Column Stat Cards */}
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {statsToDisplay.map((item, idx) => {
             const IconComponent =
               (item.icon && iconMap[item.icon]) || iconMap.Award || Award;
@@ -152,13 +155,15 @@ const StatsSection: React.FC<StatsSectionProps> = ({ initialStats }) => {
             return (
               <div
                 key={item.id || `stat-${idx}`}
-                className="group relative flex flex-col justify-between rounded-xl border border-border/80 bg-card p-4 sm:p-5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-xs"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/80 bg-card p-5 sm:p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"
               >
-                {/* Header: Icon + Number */}
+                {/* Top Accent Indicator on Hover */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-transparent transition-colors duration-300 group-hover:bg-primary" />
+
                 <div>
-                  <div className="mb-2.5 flex items-center justify-between">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary text-primary">
-                      <IconComponent className="h-4 w-4" />
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground">
+                      <IconComponent className="h-5 w-5" />
                     </div>
                   </div>
 
@@ -170,14 +175,14 @@ const StatsSection: React.FC<StatsSectionProps> = ({ initialStats }) => {
                     fallbackDisplay={item.value}
                   />
 
-                  <h3 className="mt-1 font-serif text-sm font-semibold text-foreground sm:text-base">
+                  <h3 className="mt-2 font-serif text-base font-semibold text-foreground sm:text-lg">
                     {item.label}
                   </h3>
                 </div>
 
                 {/* Subtitle / Description */}
                 {item.description && (
-                  <p className="mt-2 border-t border-border/40 pt-2 text-[11px] leading-snug text-muted-foreground sm:text-xs">
+                  <p className="mt-4 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted-foreground">
                     {item.description}
                   </p>
                 )}

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Loader2, X } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Button } from '@heroui/react';
 import { serverMutation } from '@/lib/api/serverMutation';
 import { Notice } from './NoticeFormModal';
 
