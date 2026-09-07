@@ -1,12 +1,26 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Award } from 'lucide-react';
 import { Button } from '@heroui/react';
 
+export interface CoverItem {
+  id: string;
+  imageUrl: string;
+  badge?: string | null;
+  title: string;
+  subtitle?: string | null;
+  primaryCtaText?: string | null;
+  primaryCtaLink?: string | null;
+  secondaryCtaText?: string | null;
+  secondaryCtaLink?: string | null;
+  orderIndex?: number;
+  isActive?: boolean;
+}
+
 interface Slide {
-  id: number;
+  id: string | number;
   image: string;
   badge: string;
   title: string;
@@ -17,7 +31,7 @@ interface Slide {
   secondaryCtaLink: string;
 }
 
-const slides: Slide[] = [
+const defaultSlides: Slide[] = [
   {
     id: 1,
     image:
@@ -59,9 +73,37 @@ const slides: Slide[] = [
   },
 ];
 
-const Header = () => {
+interface HeaderProps {
+  initialCovers?: CoverItem[];
+}
+
+const Header: React.FC<HeaderProps> = ({ initialCovers }) => {
+  const slides = useMemo<Slide[]>(() => {
+    if (initialCovers && initialCovers.length > 0) {
+      const active = initialCovers.filter(c => c.isActive !== false);
+      if (active.length > 0) {
+        return active.map((c, idx) => ({
+          id: c.id || `cover-${idx}`,
+          image: c.imageUrl,
+          badge: c.badge || 'Established 1984 | EIIN: 129524',
+          title: c.title,
+          subtitle: c.subtitle || '',
+          primaryCtaText: c.primaryCtaText || 'Apply for Admission',
+          primaryCtaLink: c.primaryCtaLink || '/admission',
+          secondaryCtaText: c.secondaryCtaText || 'Learn More',
+          secondaryCtaLink: c.secondaryCtaLink || '/about',
+        }));
+      }
+    }
+    return defaultSlides;
+  }, [initialCovers]);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+
+  // Keep current slide within bounds if slides length changes
+  const activeSlideIndex = currentSlide >= slides.length ? 0 : currentSlide;
+  const activeSlide = slides[activeSlideIndex] || slides[0];
 
   // Touch and mouse drag swipe handling
   const touchStartX = useRef<number | null>(null);
@@ -72,21 +114,21 @@ const Header = () => {
 
   const nextSlide = useCallback(() => {
     setCurrentSlide(prev => (prev + 1) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   const prevSlide = useCallback(() => {
     setCurrentSlide(prev => (prev - 1 + slides.length) % slides.length);
-  }, []);
+  }, [slides.length]);
 
   // 5s auto-rotate
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || slides.length <= 1) return;
     const timer = setInterval(() => {
       nextSlide();
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [nextSlide, isPaused]);
+  }, [nextSlide, isPaused, slides.length]);
 
   // Touch swipe events
   const onTouchStart = (e: React.TouchEvent) => {
@@ -154,7 +196,7 @@ const Header = () => {
           <div
             key={slide.id}
             className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide
+              index === activeSlideIndex
                 ? 'opacity-100 scale-100'
                 : 'opacity-0 scale-105 pointer-events-none'
             }`}
@@ -175,65 +217,71 @@ const Header = () => {
             {/* Pill Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-md shadow-xs sm:text-sm">
               <Award className="h-4 w-4 text-accent" />
-              <span>{slides[currentSlide].badge}</span>
+              <span>{activeSlide.badge}</span>
             </div>
 
             {/* Main Title */}
             <h1
-              key={`title-${currentSlide}`}
+              key={`title-${activeSlideIndex}`}
               className="font-serif text-3xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl text-balance"
             >
-              {slides[currentSlide].title}
+              {activeSlide.title}
             </h1>
 
             {/* Subtitle */}
             <p
-              key={`sub-${currentSlide}`}
+              key={`sub-${activeSlideIndex}`}
               className="mt-5 text-base leading-relaxed text-white/90 sm:text-lg lg:text-xl"
             >
-              {slides[currentSlide].subtitle}
+              {activeSlide.subtitle}
             </p>
 
             {/* Action Buttons */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Link
-                href={slides[currentSlide].primaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 hover:shadow-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] cursor-pointer"
-              >
-                {slides[currentSlide].primaryCtaText}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+              {activeSlide.primaryCtaText && (
+                <Link
+                  href={activeSlide.primaryCtaLink}
+                  className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 hover:shadow-primary/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98] cursor-pointer"
+                >
+                  {activeSlide.primaryCtaText}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              )}
 
-              <Link
-                href={slides[currentSlide].secondaryCtaLink}
-                className="inline-flex h-11 items-center justify-center rounded-lg border border-white/40 bg-white/15 px-6 text-sm font-semibold text-white backdrop-blur-md transition-all hover:border-white/60 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-[0.98] cursor-pointer"
-              >
-                <BookOpen className="mr-2 h-4 w-4" />
-                {slides[currentSlide].secondaryCtaText}
-              </Link>
+              {activeSlide.secondaryCtaText && (
+                <Link
+                  href={activeSlide.secondaryCtaLink}
+                  className="inline-flex h-11 items-center justify-center rounded-lg border border-white/40 bg-white/15 px-6 text-sm font-semibold text-white backdrop-blur-md transition-all hover:border-white/60 hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 active:scale-[0.98] cursor-pointer"
+                >
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  {activeSlide.secondaryCtaText}
+                </Link>
+              )}
             </div>
           </div>
         </div>
 
         {/* Slide Indicator Dots */}
-        <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2.5 z-20">
-          {slides.map((_, idx) => (
-            <Button
-              key={idx}
-              type="button"
-              onClick={e => {
-                e.stopPropagation();
-                setCurrentSlide(idx);
-              }}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer p-0 border-0 ${
-                idx === currentSlide
-                  ? 'w-8 bg-primary shadow-xs'
-                  : 'w-2 bg-white/50 hover:bg-white/80'
-              }`}
-            />
-          ))}
-        </div>
+        {slides.length > 1 && (
+          <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-2.5 z-20">
+            {slides.map((_, idx) => (
+              <Button
+                key={idx}
+                type="button"
+                onClick={e => {
+                  e.stopPropagation();
+                  setCurrentSlide(idx);
+                }}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer p-0 border-0 ${
+                  idx === activeSlideIndex
+                    ? 'w-8 bg-primary shadow-xs'
+                    : 'w-2 bg-white/50 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </header>
   );

@@ -12,6 +12,7 @@ import {
   Calendar,
   ExternalLink,
   ShieldCheck,
+  Layers,
 } from 'lucide-react';
 import { serverFetch } from '@/lib/api/serverFetch';
 
@@ -19,17 +20,19 @@ export const revalidate = 0; // Fresh dashboard metrics on load
 
 export default async function DashboardPage() {
   // Fetch real counts across modules
-  const [noticesRes, teachersRes, galleryRes, statsRes] = await Promise.all([
+  const [noticesRes, teachersRes, galleryRes, statsRes, coversRes] = await Promise.all([
     serverFetch({ path: 'notices' }).catch(() => null),
     serverFetch({ path: 'teachers' }).catch(() => null),
     serverFetch({ path: 'gallery' }).catch(() => null),
     serverFetch({ path: 'stats' }).catch(() => null),
+    serverFetch({ path: 'covers' }).catch(() => null),
   ]);
 
   const totalNotices = noticesRes?.data?.length ?? 0;
   const totalTeachers = teachersRes?.data?.length ?? 0;
   const totalGallery = galleryRes?.data?.length ?? 0;
   const totalStats = statsRes?.data?.length ?? 0;
+  const totalCovers = coversRes?.data?.length ?? 0;
 
   const cards = [
     {
@@ -224,6 +227,23 @@ export default async function DashboardPage() {
                 </div>
                 <div className="text-[11px] text-muted-foreground truncate">
                   Credentials & permissions
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              href="/dashboard/covers"
+              className="group flex items-center gap-3.5 rounded-xl border border-border/70 bg-secondary/25 p-3.5 transition-all duration-200 hover:border-primary/40 hover:bg-secondary/60 cursor-pointer shadow-2xs"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-500/10 text-teal-600 transition-transform group-hover:scale-105">
+                <Layers className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-serif text-xs font-bold text-foreground transition-colors group-hover:text-primary truncate">
+                  Hero Covers ({totalCovers})
+                </div>
+                <div className="text-[11px] text-muted-foreground truncate">
+                  Change carousel slides
                 </div>
               </div>
             </Link>

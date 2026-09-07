@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   Info,
+  Layers,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
@@ -27,6 +28,11 @@ const menuItems = [
     label: 'Overview',
     href: '/dashboard',
     icon: LayoutDashboard,
+  },
+  {
+    label: 'Hero Covers',
+    href: '/dashboard/covers',
+    icon: Layers,
   },
   {
     label: 'Notices',
